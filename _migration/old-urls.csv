@@ -1,0 +1,20 @@
+old_url;old_title;new_url;comment
+https://www.hvoia-event.ru/;База отдыха в Воронежской области | Гостевой дом «Хвоя»;/;главная остаётся главной
+https://www.hvoia-event.ru/service/khvoya-zagorodnoe-prostranstvo-dlya-prazdnikov-otdykha-i-vazhnykh-sobytiy;База отдыха в Воронежской области | Гостевой дом «Хвоя»;/;дубль главной (тот же title)
+https://www.hvoia-event.ru/service/arenda-kottedzha-s-baney-i-basseynom;Аренда коттеджа с баней и бассейном | «Xвoя»;/kottedzh/;
+https://www.hvoia-event.ru/services/kottedzh-banya-i-basseyn;Коттедж / Баня и бассейн | «Xвoя»;/kottedzh/;
+https://www.hvoia-event.ru/service/organizaciya-svadby;Организация свадьбы | «Xвoя»;/svadby/;
+https://www.hvoia-event.ru/services/organizaciya-meropriyatiy;Организация мероприятий | «Xвoя»;/prazdniki/;
+https://www.hvoia-event.ru/services/uslugi-dlya-meropriyatiy;Услуги для мероприятий | «Xвoя»;/prazdniki/;
+https://www.hvoia-event.ru/portfolio/kukhnya-gostinaya;Кухня-гостиная | «Xвoя»;/kottedzh/;блок «Дом»
+https://www.hvoia-event.ru/portfolio/spalni;Спальни | «Xвoя»;/kottedzh/;блок «Дом»
+https://www.hvoia-event.ru/portfolio/sanuzly;Санузлы | «Xвoя»;/kottedzh/;блок «Дом»
+https://www.hvoia-event.ru/portfolio/russkaya-banya-basseyn-i-chan;Русская баня, бассейн и чан | «Xвoя»;/kottedzh/;блок «Территория»
+https://www.hvoia-event.ru/portfolio/zona-barbekyu-i-besedka;Зона барбекю и беседка | «Xвoя»;/kottedzh/;блок «Территория»
+https://www.hvoia-event.ru/portfolio/banketnyy-zal;Банкетный зал | «Xвoя»;/prazdniki/;банкет в шатре
+https://www.hvoia-event.ru/portfolio;Наши зоны | «Xвoя»;/foto/;список зон, нет в sitemap
+https://www.hvoia-event.ru/service;Услуги | «Xвoя»;/;список услуг, нет в sitemap
+https://www.hvoia-event.ru/services;Услуги | «Xвoя»;/;список услуг, нет в sitemap
+https://www.hvoia-event.ru/policy;-;/politika-konfidencialnosti/;ссылка из прототипа, нет в sitemap
+https://www.hvoia-event.ru/sites/default/files/service/2025/%D0%9F%D1%80%D0%B0%D0%B2%D0%B8%D0%BB%D0%B0%20%D0%BF%D1%80%D0%BE%D0%B6%D0%B8%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F.pdf;Правила проживания (PDF);/docs/pravila-prozhivaniya.pdf;PDF получить у заказчика
+https://www.hvoia-event.ru/node/*;дубли Drupal;по canonical узла;/node/1 → /, /node/2 → /kottedzh/ и т. д. Полный список узлов — из Вебмастера

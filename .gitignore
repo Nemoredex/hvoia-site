@@ -1,0 +1,23 @@
+# сборка
+dist/
+.astro/
+
+# зависимости
+node_modules/
+
+# логи
+npm-debug.log*
+
+# секреты
+.env
+.env.*
+!.env.example
+
+# системные
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+
+# локальные настройки Claude Code
+.claude/settings.local.json
