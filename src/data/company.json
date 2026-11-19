@@ -1,0 +1,52 @@
+{
+  "_todo": [
+    "ogrn — уточнить у заказчика (коммерческий фактор, нужен в подвале)",
+    "address.postalCode — уточнить",
+    "geo — координаты точки на Яндекс Картах (для JSON-LD и карты)",
+    "docs.rules — PDF «Правила проживания» получить у заказчика и положить в public/docs/"
+  ],
+  "name": "Гостевой дом «Хвоя»",
+  "shortName": "Хвоя",
+  "legal": {
+    "name": "ООО «ХВОЯ»",
+    "inn": "3666279826",
+    "ogrn": null
+  },
+  "address": {
+    "region": "Воронежская область",
+    "district": "Рамонский район",
+    "locality": "с. Чертовицы",
+    "street": "ул. Солнечная, 14А",
+    "postalCode": null,
+    "country": "RU",
+    "full": "с. Чертовицы, ул. Солнечная, 14А, Рамонский район",
+    "near": "Рядом река Воронеж, ресторан «Сеновал», санаторий им. Дзержинского.",
+    "fromCity": "30 минут от Воронежа"
+  },
+  "geo": null,
+  "phones": {
+    "booking": { "label": "+7 900 944-05-44", "href": "tel:+79009440544", "purpose": "Бронирование" },
+    "events": { "label": "+7 920 450-75-65", "href": "tel:+79204507565", "purpose": "Свадьбы и праздники" }
+  },
+  "messengers": {
+    "telegram": "https://t.me/+79009440544",
+    "whatsapp": "https://wa.me/79009440544"
+  },
+  "email": "hvoia@internet.ru",
+  "hours": {
+    "label": "ежедневно 10:00–23:00",
+    "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    "opens": "10:00",
+    "closes": "23:00"
+  },
+  "checkin": "15:00",
+  "checkout": "12:00",
+  "yandexMaps": {
+    "url": "https://yandex.ru/maps/org/gostevoy_dom_khvoya/200587327520/",
+    "orgId": "200587327520"
+  },
+  "docs": {
+    "policy": "/politika-konfidencialnosti/",
+    "rules": "/docs/pravila-prozhivaniya.pdf"
+  }
+}
