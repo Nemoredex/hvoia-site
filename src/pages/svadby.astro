@@ -11,14 +11,17 @@ import GalleryStrip from '../components/GalleryStrip.astro';
 import Faq from '../components/Faq.astro';
 import LeadForm from '../components/LeadForm.astro';
 import { pages } from '../data/seo';
-import { heroes } from '../data/images';
+import { eventVenue, imageUrl } from '../lib/schema';
+import { heroes, photo } from '../data/images';
 import { faqWedding } from '../data/faq';
 import events from '../data/events.json';
 
 const { tent, wedding } = events;
+const images = await Promise.all([heroes.svadby.src, photo('tent-banquet'), photo('wedding-couple')].map((i) => imageUrl(i, Astro.site)));
+const jsonLd = [eventVenue(Astro.site, images)];
 ---
 
-<BaseLayout seo={pages.svadby} ogImage={heroes.svadby.src}>
+<BaseLayout seo={pages.svadby} jsonLd={jsonLd} ogImage={heroes.svadby.src}>
   <PageHero
     path="/svadby/"
     image={heroes.svadby}

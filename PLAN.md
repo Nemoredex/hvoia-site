@@ -107,7 +107,9 @@
 5. Шишка в SVG `Route` — URL через `import pinecone from '...?url'` или `getImage()`.
 6. OG-картинки 1200×630 для каждой страницы — из героев, через `getImage()`.
 
-### Этап 5. Микроразметка (`src/lib/schema.ts`)
+### Этап 5. Микроразметка (`src/lib/schema.ts`) — готово 20.11.2026
+Итог: главная — `LodgingBusiness` + `WebSite` + `FAQPage`; коттедж — `House` + `FAQPage` + `BreadcrumbList`; свадьбы — `EventVenue` + `FAQPage` + `BreadcrumbList`; праздники — `EventVenue` + `BreadcrumbList`; цены — `OfferCatalog` (только числовые цены) + `FAQPage` + `BreadcrumbList`; фото — `ImageGallery` (17 фото) + `BreadcrumbList`; контакты — `LodgingBusiness` + `BreadcrumbList`; политика — `BreadcrumbList`. `@id`: `/#org`, `/kottedzh/#house`, `/svadby/#tent`. Пустые поля (ОГРН, координаты, индекс, животные) не выводятся. Онлайн-валидаторы до localhost не достают — проверить после выкладки (этап 10).
+
 | Страница | Типы |
 |---|---|
 | Главная | `LodgingBusiness`: `name`, `url`, `logo`, `image[]`, оба `telephone`, `email`, `address`, `geo`, `openingHoursSpecification`, `checkinTime` 15:00, `checkoutTime` 12:00, `priceRange`, `amenityFeature` (бассейн, баня, чан, мангал, кондиционеры), `petsAllowed` [уточнить], `hasMap`, `sameAs` (Яндекс Карты, Telegram) + `FAQPage` |

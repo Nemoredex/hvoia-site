@@ -8,7 +8,8 @@ import Steps from '../components/Steps.astro';
 import Requisites from '../components/Requisites.astro';
 import LeadForm from '../components/LeadForm.astro';
 import { pages } from '../data/seo';
-import { heroes } from '../data/images';
+import { lodgingBusiness, imageUrl } from '../lib/schema';
+import { heroes, photo } from '../data/images';
 import company from '../data/company.json';
 
 const { address } = company;
@@ -17,9 +18,11 @@ const howTo = [
   { title: 'На&nbsp;такси', text: '[Примерная стоимость и время из центра Воронежа]' },
   { title: 'Парковка', text: '[Сколько машин помещается на территории]' },
 ];
+const images = await Promise.all([heroes.home.src, heroes.kontakty.src, photo('aerial')].map((i) => imageUrl(i, Astro.site)));
+const jsonLd = [lodgingBusiness(Astro.site, images)];
 ---
 
-<BaseLayout seo={pages.kontakty} ogImage={heroes.kontakty.src}>
+<BaseLayout seo={pages.kontakty} jsonLd={jsonLd} ogImage={heroes.kontakty.src}>
   <PageHero
     path="/kontakty/"
     image={heroes.kontakty}

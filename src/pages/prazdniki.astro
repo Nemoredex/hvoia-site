@@ -10,16 +10,19 @@ import TerritoryBento from '../components/TerritoryBento.astro';
 import Route from '../components/Route.astro';
 import LeadForm from '../components/LeadForm.astro';
 import { pages } from '../data/seo';
-import { heroes } from '../data/images';
+import { eventVenue, imageUrl } from '../lib/schema';
+import { heroes, photo } from '../data/images';
 import events from '../data/events.json';
 import stay from '../data/stay.json';
 
 const { tent, parties } = events;
 const banya = stay.territory[1];
 const gazebo = stay.territory[3];
+const images = await Promise.all([heroes.prazdniki.src, photo('tent-banquet'), photo('tent-night')].map((i) => imageUrl(i, Astro.site)));
+const jsonLd = [eventVenue(Astro.site, images)];
 ---
 
-<BaseLayout seo={pages.prazdniki} ogImage={heroes.prazdniki.src}>
+<BaseLayout seo={pages.prazdniki} jsonLd={jsonLd} ogImage={heroes.prazdniki.src}>
   <PageHero
     path="/prazdniki/"
     image={heroes.prazdniki}

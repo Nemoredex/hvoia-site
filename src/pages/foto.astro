@@ -7,11 +7,15 @@ import SectionHead from '../components/SectionHead.astro';
 import ReviewsWidget from '../components/ReviewsWidget.astro';
 import LeadForm from '../components/LeadForm.astro';
 import { pages } from '../data/seo';
-import { heroes } from '../data/images';
+import { imageGallery, imageUrl } from '../lib/schema';
+import { gallery } from '../data/gallery';
+import { heroes, photo } from '../data/images';
 import company from '../data/company.json';
+const items = await Promise.all(gallery.map(async (g) => ({ url: await imageUrl(photo(g.image), Astro.site), caption: g.caption ?? g.alt })));
+const jsonLd = [imageGallery(Astro.site, items)];
 ---
 
-<BaseLayout seo={pages.foto} ogImage={heroes.foto.src}>
+<BaseLayout seo={pages.foto} jsonLd={jsonLd} ogImage={heroes.foto.src}>
   <PageHero
     path="/foto/"
     image={heroes.foto}

@@ -11,16 +11,19 @@ import BookingSteps from '../components/BookingSteps.astro';
 import Faq from '../components/Faq.astro';
 import LeadForm from '../components/LeadForm.astro';
 import { pages } from '../data/seo';
-import { heroes } from '../data/images';
+import { house as houseLd, imageUrl } from '../lib/schema';
+import { heroes, photo } from '../data/images';
 import { faqStay } from '../data/faq';
 import { fromRub } from '../lib/format';
 import stay from '../data/stay.json';
 
 const { house } = stay;
 const [pool, banya, chan, gazebo] = stay.territory;
+const images = await Promise.all([heroes.kottedzh.src, photo('bedroom'), photo('kitchen'), photo('pool-day')].map((i) => imageUrl(i, Astro.site)));
+const jsonLd = [houseLd(Astro.site, images)];
 ---
 
-<BaseLayout seo={pages.kottedzh} ogImage={heroes.kottedzh.src} mbar={{ href: '#book-cottage', label: 'Заявка' }}>
+<BaseLayout seo={pages.kottedzh} jsonLd={jsonLd} ogImage={heroes.kottedzh.src} mbar={{ href: '#book-cottage', label: 'Заявка' }}>
   <PageHero
     path="/kottedzh/"
     image={heroes.kottedzh}

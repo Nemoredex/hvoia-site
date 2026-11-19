@@ -12,16 +12,19 @@ import ReviewsWidget from '../components/ReviewsWidget.astro';
 import Faq from '../components/Faq.astro';
 import LeadForm from '../components/LeadForm.astro';
 import { pages } from '../data/seo';
-import { heroes } from '../data/images';
+import { lodgingBusiness, webSite, imageUrl } from '../lib/schema';
+import { heroes, photo } from '../data/images';
 import { faqHome } from '../data/faq';
 import stay from '../data/stay.json';
 import events from '../data/events.json';
 
 const [pool, banya, chan, gazebo] = stay.territory;
 const bedrooms = stay.house.rooms[0];
+const images = await Promise.all([heroes.home.src, photo('pool-day'), photo('banya'), photo('tent-banquet')].map((i) => imageUrl(i, Astro.site)));
+const jsonLd = [lodgingBusiness(Astro.site, images), webSite(Astro.site)];
 ---
 
-<BaseLayout seo={pages.home} ogImage={heroes.home.src} mbar={{ href: '#book', label: 'Даты' }}>
+<BaseLayout seo={pages.home} jsonLd={jsonLd} ogImage={heroes.home.src} mbar={{ href: '#book', label: 'Даты' }}>
   <Hero
     title="Дом в&nbsp;соснах для&nbsp;отдыха и&nbsp;праздников"
     lead={`Гостевой дом «Хвоя» в 30 минутах от Воронежа: коттедж на ${stay.house.guests} гостей с баней, чаном и тёплым бассейном, шатёр для праздников до ${events.tent.capacity} человек.`}

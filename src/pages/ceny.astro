@@ -8,15 +8,17 @@ import BookingSteps from '../components/BookingSteps.astro';
 import Faq from '../components/Faq.astro';
 import LeadForm from '../components/LeadForm.astro';
 import { pages } from '../data/seo';
+import { priceCatalog } from '../lib/schema';
 import { heroes } from '../data/images';
 import { faqPrices } from '../data/faq';
 import { fromRub } from '../lib/format';
 import stay from '../data/stay.json';
 
 const { prices, booking } = stay;
+const jsonLd = [priceCatalog(Astro.site)];
 ---
 
-<BaseLayout seo={pages.ceny} ogImage={heroes.ceny.src} mbar={{ href: '#book-prices', label: 'Заявка' }}>
+<BaseLayout seo={pages.ceny} jsonLd={jsonLd} ogImage={heroes.ceny.src} mbar={{ href: '#book-prices', label: 'Заявка' }}>
   <PageHero
     path="/ceny/"
     image={heroes.ceny}
