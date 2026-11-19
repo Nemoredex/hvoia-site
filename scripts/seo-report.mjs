@@ -1,6 +1,7 @@
 // SEO-отчёт по собранному сайту: node scripts/seo-report.mjs [--strict]
 // Читает dist/, проверяет каждую страницу по правилам CLAUDE.md и пишет seo-report.html в корень проекта.
-// --strict: выйти с кодом 1, если есть ошибки (для этапа 11 и CI).
+// --strict: проверка перед продакшеном — [заглушки] и отсутствие ОГРН становятся ошибками,
+//           выход с кодом 1, если есть хоть одна ошибка (для CI и перед выкладкой).
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 
@@ -87,6 +88,10 @@ function check(file) {
   if (!noindex && !canonical) err('Нет canonical');
   if (canonical && !canonical.endsWith('/')) err('Canonical без слэша на конце');
   for (const [k, v] of Object.entries(og)) if (!v) err(`Нет ${k}`);
+  if (og['og:image']) {
+    const ogPath = new URL(og['og:image']).pathname.replace(/^\/[^/]+(?=\/_astro\/)/, '');
+    if (!exists(ogPath)) err(`Файла og:image нет в сборке: ${ogPath}`);
+  }
 
   // заголовки
   const headings = [...body.matchAll(/<h([1-6])[^>]*>([\s\S]*?)<\/h\1>/g)].map((m) => ({ level: +m[1], text: strip(m[2]) }));
@@ -128,8 +133,17 @@ function check(file) {
     }
   });
   const types = jsonld.map((j) => j.type);
-  if (url === '/' && !types.some((t) => /LodgingBusiness|Organization|LocalBusiness/.test(t)))
-    err('На главной нет LodgingBusiness / Organization (этап 5)');
+  // Какие типы обязаны быть на странице (CLAUDE.md, «Специфика проекта»).
+  const expected = {
+    '/': ['LodgingBusiness', 'FAQPage'],
+    '/kottedzh/': ['House', 'FAQPage'],
+    '/svadby/': ['EventVenue', 'FAQPage'],
+    '/prazdniki/': ['EventVenue'],
+    '/ceny/': ['OfferCatalog', 'FAQPage'],
+    '/foto/': ['ImageGallery'],
+    '/kontakty/': ['LodgingBusiness'],
+  }[url] ?? [];
+  for (const t of expected) if (!types.includes(t)) err(`Нет JSON-LD ${t}`);
   if (url !== '/' && !noindex && !types.includes('BreadcrumbList')) err('Нет BreadcrumbList');
   if (/<details/.test(body) && !types.includes('FAQPage')) warn('Есть FAQ, но нет FAQPage');
 
@@ -153,7 +167,7 @@ function check(file) {
   // заглушки и коммерческие факторы
   const text = strip(body.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<style[\s\S]*?<\/style>/g, ''));
   const placeholders = [...new Set(text.match(/\[[^\]]{2,120}\]/g) ?? [])];
-  if (placeholders.length) warn(`Незакрытые [заглушки]: ${placeholders.length}`);
+  if (placeholders.length) (strict ? err : warn)(`Незакрытые [заглушки]: ${placeholders.length} — ${placeholders.slice(0, 3).join(' ')}${placeholders.length > 3 ? ' …' : ''}`);
   const footer = strip(html.match(/<footer[\s\S]*?<\/footer>/)?.[0] ?? '');
   const commerce = {
     телефон: /\+7[\s\d()-]{10,}/.test(footer),
@@ -162,7 +176,7 @@ function check(file) {
     ИНН: /ИНН\s*\d{10}/.test(footer),
     ОГРН: /ОГРН\s*\d{13}/.test(footer),
   };
-  for (const [k, ok] of Object.entries(commerce)) if (!ok) (k === 'ОГРН' ? warn : err)(`В подвале нет: ${k}`);
+  for (const [k, ok] of Object.entries(commerce)) if (!ok) (k === 'ОГРН' && !strict ? warn : err)(`В подвале нет: ${k}`);
 
   if (sitemapUrls && !noindex && !sitemapUrls.includes(url)) err('Страницы нет в sitemap');
   if (sitemapUrls && noindex && sitemapUrls.includes(url)) err('Закрытая от индекса страница есть в sitemap');
