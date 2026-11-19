@@ -1,5 +1,6 @@
 # сборка
 dist/
+seo-report.html
 .astro/
 
 # зависимости

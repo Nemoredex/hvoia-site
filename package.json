@@ -8,7 +8,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "astro": "astro"
+    "astro": "astro",
+    "seo": "astro build && node scripts/seo-report.mjs",
+    "seo:check": "node scripts/seo-report.mjs --strict"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
