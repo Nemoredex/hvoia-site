@@ -1,0 +1,54 @@
+---
+/** Свадьбы: порядок блоков — как в _materials/svadby.html. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Split from '../components/Split.astro';
+import CheckList from '../components/CheckList.astro';
+import Button from '../components/Button.astro';
+import Tent from '../components/Tent.astro';
+import Steps from '../components/Steps.astro';
+import GalleryStrip from '../components/GalleryStrip.astro';
+import Faq from '../components/Faq.astro';
+import LeadForm from '../components/LeadForm.astro';
+import { pages } from '../data/seo';
+import { heroes } from '../data/images';
+import { faqWedding } from '../data/faq';
+import events from '../data/events.json';
+
+const { tent, wedding } = events;
+---
+
+<BaseLayout seo={pages.svadby}>
+  <PageHero
+    path="/svadby/"
+    image={heroes.svadby}
+    edge="mist"
+    headerCta="#contacts"
+    headerCtaLabel="Обсудить свадьбу"
+    title="Свадьба под&nbsp;ключ в&nbsp;сосновом лесу"
+    lead={`Тёплый шатёр на ${tent.area} м² круглый год, церемония среди сосен и ночёвка в доме. Организатор возьмёт на себя всё — от декора до банкета.`}
+    facts={[`до ${tent.capacity} гостей`, `шатёр ${tent.area} м²`, 'круглый год']}
+    cta={{ href: '#contacts', label: 'Обсудить свадьбу' }}
+  />
+  <Split image="wedding-couple" alt="Молодожёны у свадебной арки среди сосен" arch>
+    <h2 class="title-lg">Что входит в&nbsp;свадьбу под&nbsp;ключ</h2>
+    <p>{wedding.lead}</p>
+    <CheckList items={wedding.included} />
+    <div><Button href="#contacts">Получить смету</Button></div>
+  </Split>
+  <Tent />
+  <section class="section container" style="padding-top:96px">
+    <h2 class="title-lg" style="margin-bottom:48px">Как мы готовим свадьбу</h2>
+    <Steps items={wedding.steps} />
+  </section>
+  <GalleryStrip
+    title="Как это выглядит"
+    items={[
+      { image: 'tent-banquet', alt: 'Шатёр, накрытый к банкету', layout: 'wide' },
+      { image: 'wedding-decor', alt: 'Декор свадебного стола', layout: 'arch' },
+      { image: 'tent-party', alt: 'Праздник в шатре' },
+    ]}
+  />
+  <Faq title="Вопросы о&nbsp;свадьбе" items={faqWedding} intro="Организатор ответит на всё на встрече — приезжайте посмотреть территорию." />
+  <LeadForm title="Расскажите о&nbsp;вашей свадьбе" reason="Свадьба" />
+</BaseLayout>

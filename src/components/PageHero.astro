@@ -1,0 +1,74 @@
+---
+/**
+ * Первый экран внутренних страниц. У каждой страницы свой переход к контенту (README прототипа):
+ * hill — Коттедж, mist — Свадьбы, garland — Праздники, drift — Цены, frame — Фото, road — Как добраться.
+ */
+import HeroPicture from './HeroPicture.astro';
+import Header from './Header.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import Button from './Button.astro';
+import type { HeroImage } from '../data/images';
+
+type Edge = 'hill' | 'mist' | 'garland' | 'drift' | 'frame' | 'road' | 'plain';
+
+interface Props {
+  /** Путь страницы без base — для крошек. Без пути крошек нет (404). */
+  path?: string;
+  title: string;
+  lead: string;
+  image?: HeroImage;
+  edge: Edge;
+  facts?: string[];
+  cta?: { href: string; label: string };
+  /** Куда ведёт главная кнопка в шапке и её подпись (по умолчанию «Забронировать»). */
+  headerCta: string;
+  headerCtaLabel?: string;
+}
+const { path, title, lead, image, edge, facts = [], cta, headerCta, headerCtaLabel } = Astro.props;
+
+const cls = [
+  'hero',
+  'hero--inner',
+  edge === 'mist' && 'hero--mist',
+  edge === 'frame' && 'hero--frame',
+  (edge === 'frame' || edge === 'road' || edge === 'plain') && 'hero--flat',
+  edge === 'plain' && 'hero--plain',
+]
+  .filter(Boolean)
+  .join(' ');
+const treesBack = ['hill', 'mist', 'garland', 'drift'].includes(edge);
+const treesFront = ['hill', 'garland', 'drift'].includes(edge);
+---
+
+<section class={cls}>
+  {image && <HeroPicture image={image} />}
+  <div class="hero__shade" aria-hidden="true"></div>
+  <Header ctaHref={headerCta} ctaLabel={headerCtaLabel} />
+  <div class="hero__inner">
+    {path && <Breadcrumbs path={path} />}
+    <div class="hero__text">
+      <h1 class="title-xl" set:html={title} />
+      <p class="hero__lead">{lead}</p>
+    </div>
+    {facts.length > 0 && <ul class="hero__facts">{facts.map((f) => <li>{f}</li>)}</ul>}
+    {cta && <div><Button href={cta.href} size="lg">{cta.label}</Button></div>}
+  </div>
+  <div class="hero__glow" aria-hidden="true"></div>
+  {edge === 'drift' && <div class="hero__snow" aria-hidden="true"></div>}
+  {treesBack && <div class="trees trees--back" aria-hidden="true"></div>}
+  {treesFront && <div class="trees trees--front" aria-hidden="true"></div>}
+  {edge === 'hill' && (
+    <div class="hero__edge hero__edge--hill" aria-hidden="true"><svg viewBox="0 0 1440 120" preserveAspectRatio="none"><path d="M0 120V72C260 20 520 8 760 44S1180 98 1440 36V120Z" fill="#F5F1E6" /></svg></div>
+  )}
+  {(edge === 'mist' || edge === 'plain') && <div class="hero__edge hero__edge--mist" aria-hidden="true"></div>}
+  {edge === 'garland' && <div class="hero__edge hero__edge--garland" aria-hidden="true"></div>}
+  {edge === 'drift' && (
+    <div class="hero__edge hero__edge--drift" aria-hidden="true"><svg viewBox="0 0 1440 140" preserveAspectRatio="none"><path d="M0 140V88C90 60 170 58 250 80S420 106 520 76S700 40 820 66S1000 104 1120 74S1330 50 1440 78V140Z" fill="#F5F1E6" /></svg></div>
+  )}
+  {edge === 'road' && (
+    <div class="hero__edge hero__edge--road" aria-hidden="true">
+      <svg viewBox="0 0 1440 140" preserveAspectRatio="none"><path d="M0 140V96C300 140 640 40 980 70S1320 80 1440 30V140Z" fill="#F5F1E6" /><path d="M-10 72C300 116 640 14 980 44" fill="none" stroke="#F5F1E6" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round" vector-effect="non-scaling-stroke" /></svg>
+      <svg class="hero__road-pin" viewBox="0 0 40 54"><path d="M20 0a20 20 0 0 1 20 20c0 16-20 34-20 34S0 36 0 20A20 20 0 0 1 20 0Z" fill="#E3A33B" /><circle cx="20" cy="20" r="7" fill="#232A20" /></svg>
+    </div>
+  )}
+</section>

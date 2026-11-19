@@ -1,0 +1,28 @@
+---
+/** «Как забронировать»: светлый вариант на креме или тёмная полоса (Коттедж). */
+import Steps from './Steps.astro';
+import DarkBand from './DarkBand.astro';
+import BookForm from './BookForm.astro';
+import { bookingSteps } from '../data/offers';
+
+interface Props {
+  dark?: boolean;
+  sectionStyle?: string;
+  /** id формы дат под шагами (Цены). */
+  bookFormId?: string;
+}
+const { dark = false, sectionStyle = 'padding-top:96px;padding-bottom:48px', bookFormId } = Astro.props;
+---
+
+{dark ? (
+  <DarkBand left>
+    <h2 class="title-lg">Как забронировать</h2>
+    <Steps items={bookingSteps} dark />
+  </DarkBand>
+) : (
+  <section class="section container" style={sectionStyle}>
+    <h2 class="title-lg" style="margin-bottom:48px">Как забронировать</h2>
+    <Steps items={bookingSteps} />
+    {bookFormId && <div style="margin-top:48px"><BookForm id={bookFormId} /></div>}
+  </section>
+)}

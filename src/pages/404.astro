@@ -1,11 +1,19 @@
 ---
-// 404: noindex, без canonical. Хостинг должен отдавать её с кодом 404 (этап 6).
+// 404: noindex, без canonical и крошек. Хостинг должен отдавать её с кодом 404 (этап 6).
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
 import { pages } from '../data/seo';
+import { mainNav } from '../data/navigation';
 import { href } from '../lib/url';
 ---
 
-<BaseLayout seo={pages.notFound}>
-  <h1>Страница не найдена</h1>
-  <p><a href={href('/')}>На главную</a></p>
+<BaseLayout seo={pages.notFound} mbar={{ href: '/', label: 'Главная' }}>
+  <PageHero edge="plain" headerCta="/#book" title="Страница не&nbsp;найдена" lead="Возможно, ссылка устарела. Вот что есть на сайте:" />
+  <section class="section container">
+    <ul class="filter">
+      {mainNav.map((l) => <li style="list-style:none"><a class="chip chip--light" href={href(l.path)}>{l.label}</a></li>)}
+    </ul>
+    <div style="margin-top:24px"><Button href="/">На главную</Button></div>
+  </section>
 </BaseLayout>

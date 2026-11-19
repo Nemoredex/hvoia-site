@@ -1,0 +1,56 @@
+---
+/** Праздники: порядок блоков — как в _materials/prazdniki.html. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CardsRow from '../components/CardsRow.astro';
+import Split from '../components/Split.astro';
+import CheckList from '../components/CheckList.astro';
+import Button from '../components/Button.astro';
+import TerritoryBento from '../components/TerritoryBento.astro';
+import Route from '../components/Route.astro';
+import LeadForm from '../components/LeadForm.astro';
+import { pages } from '../data/seo';
+import { heroes } from '../data/images';
+import events from '../data/events.json';
+import stay from '../data/stay.json';
+
+const { tent, parties } = events;
+const banya = stay.territory[1];
+const gazebo = stay.territory[3];
+---
+
+<BaseLayout seo={pages.prazdniki}>
+  <PageHero
+    path="/prazdniki/"
+    image={heroes.prazdniki}
+    edge="garland"
+    headerCta="#contacts"
+    headerCtaLabel="Получить смету"
+    title="Праздники и&nbsp;корпоративы в&nbsp;лесу"
+    lead={`День рождения, юбилей или корпоратив до ${tent.capacity} гостей: банкет в тёплом шатре, а потом баня, чан и бассейн.`}
+    facts={[`до ${tent.capacity} гостей`, 'кейтеринг', 'баня, чан, бассейн']}
+    cta={{ href: '#contacts', label: 'Получить смету' }}
+  />
+  <CardsRow fade={`${tent.capacity} гостей`} title="Какие праздники проводим" lead={parties.lead} cards={parties.formats} />
+  <Split image="wedding-decor" alt="Праздничная сервировка стола в шатре" imageRight>
+    <h2 class="title-lg">Что можно заказать</h2>
+    <p>Соберём праздник под ваш бюджет: от банкета до оформления и отдыха для гостей.</p>
+    <CheckList items={parties.included} />
+    <div><Button href="#contacts">Получить смету</Button></div>
+  </Split>
+  <TerritoryBento
+    fade="круглый год"
+    fadeLong
+    title="Отдых после банкета"
+    lead="Гостям праздника доступна вся территория."
+    big={{ image: 'chan', title: 'Баня, чан и&nbsp;бассейн', text: 'Для гостей праздника — круглый год', alt: 'Баня, чан и бассейн' }}
+    cards={[
+      { ...gazebo, title: 'Беседка и&nbsp;мангал', alt: 'Беседка и мангал' },
+      { image: 'tent-night', title: 'Шатёр вечером', text: 'Огни среди сосен' },
+      { image: 'aerial', title: 'Территория', text: 'Дом, бассейн, шатёр и беседка' },
+      banya,
+    ]}
+  />
+  <Route />
+  <LeadForm title="Расскажите о&nbsp;празднике" reason="День рождения или юбилей" />
+</BaseLayout>

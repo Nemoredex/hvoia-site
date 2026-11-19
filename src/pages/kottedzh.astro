@@ -1,0 +1,57 @@
+---
+/** Коттедж: порядок блоков — как в _materials/kottedzh.html. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CardsRow from '../components/CardsRow.astro';
+import Split from '../components/Split.astro';
+import CheckList from '../components/CheckList.astro';
+import TerritoryBento from '../components/TerritoryBento.astro';
+import StayPrice from '../components/StayPrice.astro';
+import BookingSteps from '../components/BookingSteps.astro';
+import Faq from '../components/Faq.astro';
+import LeadForm from '../components/LeadForm.astro';
+import { pages } from '../data/seo';
+import { heroes } from '../data/images';
+import { faqStay } from '../data/faq';
+import { fromRub } from '../lib/format';
+import stay from '../data/stay.json';
+
+const { house } = stay;
+const [pool, banya, chan, gazebo] = stay.territory;
+---
+
+<BaseLayout seo={pages.kottedzh} mbar={{ href: '#book-cottage', label: 'Заявка' }}>
+  <PageHero
+    path="/kottedzh/"
+    image={heroes.kottedzh}
+    edge="hill"
+    headerCta="#book-cottage"
+    title={`Коттедж в&nbsp;соснах на&nbsp;${house.guests} гостей`}
+    lead={`Дом ${house.area} м² и вся территория — только для вашей компании: ${house.bedrooms} спальни, баня на дровах, банный чан и тёплый бассейн.`}
+    facts={[`${house.area} м²`, `до ${house.guests} гостей`, `${house.bedrooms} спальни`, `${fromRub(stay.prices.weekday.from)} в сутки`]}
+    cta={{ href: '#book-cottage', label: 'Проверить даты' }}
+  />
+  <CardsRow fade={`${house.guests} гостей`} title="Дом" lead={house.summary} cards={house.rooms} />
+  <Split image="house-winter" alt="Коттедж «Хвоя» зимним вечером">
+    <h2 class="title-md">Всё для&nbsp;большой компании</h2>
+    <p>Кухня-гостиная с панорамными окнами на сосны и столом на {house.guests} человек. В доме есть всё, чтобы приехать налегке.</p>
+    <CheckList items={['Халаты и полотенца', 'Посуда на всю компанию', 'Кондиционеры во всех спальнях', 'Ортопедические матрасы', house.amenitiesNote]} />
+  </Split>
+  <TerritoryBento
+    fade="круглый год"
+    fadeLong
+    title="Территория"
+    lead="Баня, чан и бассейн работают круглый год. Территория сдаётся целиком — соседей нет."
+    big={{ ...pool, alt: 'Тёплый бассейн 7×4 м днём' }}
+    cards={[
+      banya,
+      chan,
+      { ...gazebo, title: 'Беседка и&nbsp;мангал', alt: 'Беседка и мангал' },
+      { image: 'aerial', title: 'Вся территория', text: 'Дом, бассейн, шатёр и беседка — без соседей', alt: 'Территория гостевого дома сверху' },
+    ]}
+  />
+  <StayPrice />
+  <BookingSteps dark />
+  <Faq title="Вопросы о&nbsp;проживании" items={faqStay} intro="Полные правила — в документе «Правила проживания»." />
+  <LeadForm title="Забронировать дом" />
+</BaseLayout>

@@ -26,8 +26,8 @@ export const packages: Package[] = [
   {
     id: 'stay',
     title: 'Отдых в коттедже',
-    price: `${fromRub(prices.weekday.from)} в сутки`,
-    priceNote: `${prices.weekday.short}, ${prices.weekend.short} ${fromRub(prices.weekend.from)}`,
+    price: fromRub(prices.weekday.from),
+    priceNote: `в сутки ${prices.weekday.short}, ${prices.weekend.short} ${fromRub(prices.weekend.from)}`,
     items: stay.included,
     cta: 'Выбрать даты',
     ctaHref: '/ceny/',
@@ -66,7 +66,7 @@ export const bookingSteps = [
     text: `Даты закреплены за вами. Перенести можно не позднее чем за ${booking.rescheduleDays} дней.`,
   },
   {
-    title: `Заселение с ${company.checkin}`,
+    title: `Заселение с ${company.checkin}`,
     text: `Нужен паспорт и возвратный залог: ${rub(deposit.small.price)} до ${deposit.guestsThreshold} гостей, ${rub(deposit.large.price)} — больше. Выезд до ${company.checkout}.`,
   },
 ];

@@ -1,0 +1,39 @@
+---
+/**
+ * Хлебные крошки в первом экране + JSON-LD BreadcrumbList из тех же данных.
+ * Цепочка: Главная → текущая страница (подписи из navigation.ts).
+ */
+import { crumbLabels } from '../data/navigation';
+import { absoluteUrl, href } from '../lib/url';
+
+interface Props {
+  /** Путь текущей страницы без base, например '/kottedzh/'. */
+  path: string;
+}
+const { path } = Astro.props;
+const label = crumbLabels[path];
+if (!label) throw new Error(`[crumbs] нет подписи для ${path} в navigation.ts`);
+
+const items = [
+  { name: crumbLabels['/'], path: '/' },
+  { name: label, path },
+];
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((it, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: it.name,
+    item: absoluteUrl(it.path, Astro.site).href,
+  })),
+};
+---
+
+<nav aria-label="Хлебные крошки">
+  <ol class="crumbs">
+    <li><a href={href('/')}>{items[0].name}</a></li>
+    <li><span aria-current="page">{label}</span></li>
+  </ol>
+</nav>
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

@@ -1,0 +1,46 @@
+---
+/** Карточка маршрута: адрес и схема «Воронеж → Хвоя». Шишки стоят на кривой с равным шагом. */
+import { getImage } from 'astro:assets';
+import company from '../data/company.json';
+import pinecone from '../assets/img/decor/pinecone.webp';
+
+interface Props {
+  /** Классы обёртки: на разных страницах разные отступы. */
+  sectionClass?: string;
+  id?: string;
+}
+const { sectionClass = 'section section--tight container', id } = Astro.props;
+// 28×31 на схеме → берём вдвое больше для чётких экранов.
+const cone = await getImage({ src: pinecone, width: 56, format: 'webp' });
+const cones = [
+  [184.0, 104.6, 170.0, 89.1],
+  [312.2, 65.3, 298.2, 49.8],
+  [444.5, 98.3, 430.5, 82.8],
+];
+const { address } = company;
+---
+
+<section class={sectionClass} id={id}>
+  <div class="route-card">
+    <div class="route-card__text">
+      <h2 class="title-md">30&nbsp;минут&nbsp;— и&nbsp;вы в&nbsp;лесу</h2>
+      <p>{address.locality}, {address.street}, {address.district}. {address.near}</p>
+      <a class="link" href={company.yandexMaps.url}>Построить маршрут в Яндекс Картах</a>
+    </div>
+    <div class="route-card__map">
+      <svg viewBox="0 0 640 180" role="img" aria-label={`Маршрут: Воронеж — 30 минут на машине — ${company.name}`}>
+        <path d="M40 140 C 180 150, 220 40, 340 70 S 520 140, 600 44" fill="none" stroke="#2E3A2B" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round" />
+        {cones.map(([cx, cy, x, y]) => (
+          <>
+            <circle cx={cx} cy={cy} r="20" fill="#FFFFFF" />
+            <image href={cone.src} x={x} y={y} width="28" height="31" />
+          </>
+        ))}
+        <circle cx="40" cy="140" r="12" fill="#FFFFFF" stroke="#2E3A2B" stroke-width="3" />
+        <path d="M600 14 a20 20 0 0 1 20 20 c0 16 -20 34 -20 34 s-20 -18 -20 -34 a20 20 0 0 1 20 -20 Z" fill="#E3A33B" />
+        <circle cx="600" cy="34" r="7" fill="#232A20" />
+      </svg>
+      <div class="route-card__labels"><span>Воронеж</span><span>≈ 30 минут на машине</span><span>{company.shortName}</span></div>
+    </div>
+  </div>
+</section>

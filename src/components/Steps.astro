@@ -1,0 +1,18 @@
+---
+/** Шаги с крупными бледными цифрами. */
+interface Props {
+  items: { title: string; text: string }[];
+  dark?: boolean;
+}
+const { items, dark = false } = Astro.props;
+---
+
+<ol class:list={['steps', items.length === 4 && 'steps--4', dark && 'steps--dark']}>
+  {items.map((s, i) => (
+    <li class="step">
+      <span class="step__num" aria-hidden="true">{i + 1}</span><span class="step__dot" aria-hidden="true"></span>
+      <h3 set:html={s.title} />
+      <p>{s.text}</p>
+    </li>
+  ))}
+</ol>

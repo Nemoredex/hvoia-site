@@ -1,0 +1,39 @@
+---
+/** Цены: порядок блоков — как в _materials/ceny.html. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import PriceCards from '../components/PriceCards.astro';
+import Packages from '../components/Packages.astro';
+import BookingSteps from '../components/BookingSteps.astro';
+import Faq from '../components/Faq.astro';
+import LeadForm from '../components/LeadForm.astro';
+import { pages } from '../data/seo';
+import { heroes } from '../data/images';
+import { faqPrices } from '../data/faq';
+import { fromRub } from '../lib/format';
+import stay from '../data/stay.json';
+
+const { prices, booking } = stay;
+---
+
+<BaseLayout seo={pages.ceny} mbar={{ href: '#book-prices', label: 'Заявка' }}>
+  <PageHero
+    path="/ceny/"
+    image={heroes.ceny}
+    edge="drift"
+    headerCta="#book-prices"
+    title="Цены на&nbsp;отдых и&nbsp;праздники"
+    lead="Весь дом и территория — только для вашей компании. Свадьбы и праздники считаем по смете под ваш бюджет."
+    facts={[`${prices.weekday.short} ${fromRub(prices.weekday.from)}`, `${prices.weekend.short} ${fromRub(prices.weekend.from)}`, `задаток ${booking.prepaymentPercent}%`]}
+  />
+  <PriceCards />
+  <Packages
+    title="Что входит в&nbsp;каждый формат"
+    lead="Выберите формат — покажем точную стоимость на ваши даты."
+    currentPath="/ceny/"
+    selfAnchor="#book-prices"
+  />
+  <BookingSteps sectionStyle="padding-top:96px" bookFormId="book-prices" />
+  <Faq title="Вопросы о&nbsp;ценах" items={faqPrices} intro="Полные условия — в документе «Правила проживания»." />
+  <LeadForm title="Расскажите, что планируете" />
+</BaseLayout>

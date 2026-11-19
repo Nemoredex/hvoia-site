@@ -1,0 +1,17 @@
+---
+/** Заголовок секции: H2 + пояснение справа или ссылка. faded — под крупной бледной надписью. */
+import { href as toHref } from '../lib/url';
+interface Props {
+  title: string;
+  lead?: string;
+  link?: { href: string; label: string };
+  faded?: boolean;
+}
+const { title, lead, link, faded = false } = Astro.props;
+---
+
+<div class:list={['section__head', faded && 'section__head--faded']}>
+  <h2 class="title-lg" set:html={title} />
+  {lead && <p>{lead}</p>}
+  {link && <a class="link" href={toHref(link.href)}>{link.label}</a>}
+</div>

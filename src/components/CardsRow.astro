@@ -1,0 +1,27 @@
+---
+/** Три карточки с высокими фото: комнаты дома, форматы праздников. */
+import Img from './Img.astro';
+import SectionHead from './SectionHead.astro';
+import { photo } from '../data/images';
+
+interface Props {
+  fade: string;
+  title: string;
+  lead: string;
+  cards: { image: string; title: string; text: string; alt?: string }[];
+}
+const { fade, title, lead, cards } = Astro.props;
+---
+
+<section class="section container">
+  <div class="fade-number" aria-hidden="true">{fade}</div>
+  <SectionHead title={title} lead={lead} faded />
+  <div class="cards-3">
+    {cards.map((c) => (
+      <div class="card">
+        <Img class="card__img card__img--tall" src={photo(c.image)} alt={c.alt ?? c.title} sizes="(max-width: 760px) 100vw, 33vw" widths={[480, 800, 1200]} />
+        <div class="card__body"><h3>{c.title}</h3><p>{c.text}</p></div>
+      </div>
+    ))}
+  </div>
+</section>

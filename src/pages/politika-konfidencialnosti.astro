@@ -1,0 +1,35 @@
+---
+/**
+ * Политика обработки персональных данных. На старом сайте — /policy (301 сюда, этап 9).
+ * Текст юридический — получить у заказчика; до этого стоят [заглушки], и scripts/seo-check.mjs их найдёт.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { pages } from '../data/seo';
+import company from '../data/company.json';
+
+const { legal, address } = company;
+---
+
+<BaseLayout seo={pages.politika} mbar={{ href: '/kontakty/#contacts', label: 'Заявка' }}>
+  <PageHero
+    path="/politika-konfidencialnosti/"
+    edge="plain"
+    headerCta="/kontakty/#contacts"
+    title="Политика обработки персональных данных"
+    lead={`${legal.name}, ИНН ${legal.inn}. ${address.full}.`}
+  />
+  <section class="section container">
+    <div class="prose">
+      <p>[Текст политики получить у заказчика. Сейчас действует версия на старом сайте: www.hvoia-event.ru/policy.]</p>
+      <h2>Кто обрабатывает данные</h2>
+      <p>{legal.name}, ИНН {legal.inn}{legal.ogrn ? `, ОГРН ${legal.ogrn}` : ''}. Адрес: {address.full}. Почта для обращений: <a href={`mailto:${company.email}`}>{company.email}</a>.</p>
+      <h2>Какие данные собирает сайт</h2>
+      <p>Имя, телефон, желаемые даты и формат отдыха — из формы заявки. [Уточнить: файлы cookie и Яндекс Метрика.]</p>
+      <h2>Зачем</h2>
+      <p>Чтобы связаться с вами, подобрать даты и подготовить предложение. [Уточнить у заказчика.]</p>
+      <h2>Сроки хранения и отзыв согласия</h2>
+      <p>[Уточнить у заказчика.]</p>
+    </div>
+  </section>
+</BaseLayout>

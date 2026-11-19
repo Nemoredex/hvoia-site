@@ -1,0 +1,15 @@
+---
+/** Нижняя панель на телефоне: позвонить, написать, главное действие страницы. */
+import company from '../data/company.json';
+import { href } from '../lib/url';
+
+interface Props {
+  ctaHref: string;
+  ctaLabel: string;
+}
+const { ctaHref, ctaLabel } = Astro.props;
+---
+
+<nav class="mbar" aria-label="Быстрая связь">
+  <a href={company.phones.booking.href}>Позвонить</a><a href={company.messengers.telegram}>Написать</a><a class="is-cta" href={href(ctaHref)}>{ctaLabel}</a>
+</nav>

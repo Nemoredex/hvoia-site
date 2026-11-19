@@ -1,0 +1,14 @@
+---
+/** Строки прайса с точками-заполнителями. */
+import type { PriceRow } from '../data/offers';
+interface Props {
+  rows: PriceRow[];
+}
+const { rows } = Astro.props;
+---
+
+<ul class="price-list">
+  {rows.map((r) => (
+    <li><span>{r.label}</span><span class="price-list__dots" aria-hidden="true"></span><span class="price-list__value">{r.value}</span></li>
+  ))}
+</ul>

@@ -1,0 +1,53 @@
+---
+/**
+ * Проверка свободных дат. Пока демо, как в прототипе: на этапе 7 (PLAN.md) передаёт даты
+ * в модуль онлайн-бронирования (TravelLine / Bnovo), который грузится только после клика.
+ * Даты по умолчанию ставит скрипт (ближайшие пт–вс), чтобы в HTML не застревали прошедшие числа.
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+---
+
+<form class="book-form" id={id} aria-label="Проверить свободные даты" data-book-form data-demo-note="Демо-версия: на готовом сайте здесь откроется онлайн-бронирование с этими датами.">
+  <label class="book-form__field">Заезд<input class="input" type="date" name="checkin" required /></label>
+  <label class="book-form__field">Выезд<input class="input" type="date" name="checkout" required /></label>
+  <label class="book-form__field book-form__field--sm">Гостей<select class="input" name="guests"><option>до 10</option><option>11–20</option><option>больше 20</option></select></label>
+  <button class="btn btn--amber" type="submit"><span class="btn__icon"><Icon name="arrow" /></span>Проверить свободные даты</button>
+</form>
+
+<script>
+  // main.js прототипа, блок 4: выезд не раньше заезда + демо-сообщение.
+  const iso = (d: Date) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  document.querySelectorAll<HTMLFormElement>('[data-book-form]').forEach((form) => {
+    const checkin = form.querySelector<HTMLInputElement>('[name="checkin"]')!;
+    const checkout = form.querySelector<HTMLInputElement>('[name="checkout"]')!;
+    const today = new Date();
+    const friday = new Date(today);
+    friday.setDate(today.getDate() + ((5 - today.getDay() + 7) % 7 || 7));
+    const sunday = new Date(friday);
+    sunday.setDate(friday.getDate() + 2);
+    checkin.min = iso(today);
+    if (!checkin.value) checkin.value = iso(friday);
+    if (!checkout.value) checkout.value = iso(sunday);
+    const syncMin = () => {
+      checkout.min = checkin.value;
+      if (checkout.value && checkout.value <= checkin.value) checkout.value = '';
+    };
+    checkin.addEventListener('change', syncMin);
+    checkout.min = checkin.value;
+
+    const note = document.createElement('p');
+    note.className = 'demo-note';
+    note.setAttribute('role', 'status');
+    form.insertAdjacentElement('afterend', note);
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      note.textContent = form.dataset.demoNote ?? '';
+    });
+  });
+</script>

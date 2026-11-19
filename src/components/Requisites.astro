@@ -1,0 +1,18 @@
+---
+/** Реквизиты и документы — на нашем домене, не на старом сайте. */
+import company from '../data/company.json';
+import { href } from '../lib/url';
+
+const { legal, docs } = company;
+---
+
+<section class="section section--tight container">
+  <h2 class="title-md" style="margin-bottom:24px">Реквизиты и&nbsp;документы</h2>
+  <dl class="requisites">
+    <div><dt>Организация</dt><dd>{legal.name}</dd></div>
+    <div><dt>ИНН</dt><dd>{legal.inn}</dd></div>
+    <div><dt>ОГРН</dt><dd>{legal.ogrn ?? '[уточнить у заказчика]'}</dd></div>
+    <div><dt>Правила проживания</dt><dd><a href={href(docs.rules)}>Скачать PDF</a></dd></div>
+    <div><dt>Персональные данные</dt><dd><a href={href(docs.policy)}>Политика конфиденциальности</a></dd></div>
+  </dl>
+</section>

@@ -1,0 +1,36 @@
+---
+/** Три формата: отдых, свадьба, праздники. Данные — offers.ts. */
+import DarkBand from './DarkBand.astro';
+import Button from './Button.astro';
+import { packages, extraNote } from '../data/offers';
+
+interface Props {
+  title?: string;
+  lead?: string;
+  /** Путь текущей страницы: кнопка, ведущая сюда же, превращается в якорь формы. */
+  currentPath?: string;
+  selfAnchor?: string;
+}
+const {
+  title = 'Выберите свой формат',
+  lead = 'Отдых компанией или праздник под ключ — вся территория только для вас.',
+  currentPath,
+  selfAnchor = '#contacts',
+} = Astro.props;
+---
+
+<DarkBand id="packages" withBranch>
+  <h2 class="title-lg" set:html={title} />
+  <p class="packages__lead">{lead}</p>
+  <div class="packages__grid">
+    {packages.map((p) => (
+      <article class:list={['package', p.featured && 'package--accent']}>
+        <h3 class="package__title">{p.title.replace(/ (в|под|и) /, ' $1 ')}</h3>
+        <div><div class="package__price">{p.price}</div><div class="package__note">{p.priceNote}</div></div>
+        <ul>{p.items.map((it) => <li>{it}</li>)}</ul>
+        <Button href={p.ctaHref === currentPath ? selfAnchor : p.ctaHref} variant={p.featured ? 'amber' : 'forest'}>{p.cta}</Button>
+      </article>
+    ))}
+  </div>
+  <p class="packages__foot">{extraNote}</p>
+</DarkBand>

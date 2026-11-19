@@ -1,0 +1,51 @@
+---
+/**
+ * Вопросы на details/summary: ответы есть в HTML без JS, поисковик их видит.
+ * JSON-LD FAQPage из того же массива — текст совпадает с видимым.
+ */
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import company from '../data/company.json';
+import type { FaqItem } from '../data/faq';
+
+interface Props {
+  title: string;
+  items: FaqItem[];
+  /** Текст под заголовком; по умолчанию — про часы работы. */
+  intro?: string;
+}
+const {
+  title,
+  items,
+  intro = `Не нашли ответ — позвоните или напишите, ответим ежедневно с ${company.hours.opens} до ${company.hours.closes}.`,
+} = Astro.props;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<section class="section container">
+  <div class="faq">
+    <div class="faq__intro">
+      <h2 class="title-lg" set:html={title} />
+      <p>{intro}</p>
+      <div><Button href={company.phones.booking.href} variant="forest">{company.phones.booking.label}</Button></div>
+    </div>
+    <div class="faq__list">
+      {items.map((f, i) => (
+        <details class="faq-item" open={i === 0}>
+          <summary>{f.q}<span class="faq-item__icon"><Icon name="plus" /></span></summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

@@ -1,0 +1,23 @@
+---
+/** Фото + текст: HouseSplit, WeddingIncluded, EventIncluded. Текст и кнопка — в слоте. */
+import Img from './Img.astro';
+import { photo } from '../data/images';
+
+interface Props {
+  image: string;
+  alt: string;
+  arch?: boolean;
+  /** Фото справа (по умолчанию слева). */
+  imageRight?: boolean;
+}
+const { image, alt, arch = false, imageRight = false } = Astro.props;
+const cls = arch ? 'split__img split__img--arch' : 'split__img';
+---
+
+<section class="section container">
+  <div class="split">
+    {!imageRight && <Img class={cls} src={photo(image)} alt={alt} sizes="(max-width: 960px) 100vw, 50vw" />}
+    <div class="split__text"><slot /></div>
+    {imageRight && <Img class={cls} src={photo(image)} alt={alt} sizes="(max-width: 960px) 100vw, 50vw" />}
+  </div>
+</section>

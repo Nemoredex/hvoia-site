@@ -1,0 +1,40 @@
+---
+/** Бенто территории: большое фото со стеклянной подписью + 4 карточки. */
+import Img from './Img.astro';
+import SectionHead from './SectionHead.astro';
+import { photo } from '../data/images';
+
+export interface BentoItem {
+  image: string;
+  title: string;
+  text: string;
+  alt?: string;
+}
+interface Props {
+  fade: string;
+  fadeLong?: boolean;
+  title: string;
+  lead: string;
+  big: BentoItem;
+  cards: BentoItem[];
+}
+const { fade, fadeLong = false, title, lead, big, cards } = Astro.props;
+const plain = (s: string) => s.replace(/&nbsp;/g, ' ');
+---
+
+<section class="section container">
+  <div class:list={['fade-number', fadeLong && 'fade-number--long']} aria-hidden="true">{fade}</div>
+  <SectionHead title={title} lead={lead} faded />
+  <div class="bento">
+    <div class="bento__big">
+      <Img src={photo(big.image)} alt={big.alt ?? plain(big.title)} sizes="(max-width: 520px) 100vw, 50vw" />
+      <div class="glass"><h3 set:html={big.title} /><p>{big.text}</p></div>
+    </div>
+    {cards.map((c) => (
+      <div class="card">
+        <Img class="card__img" src={photo(c.image)} alt={c.alt ?? plain(c.title)} sizes="(max-width: 520px) 100vw, (max-width: 960px) 50vw, 25vw" widths={[480, 800]} />
+        <div class="card__body"><h3 set:html={c.title} /><p>{c.text}</p></div>
+      </div>
+    ))}
+  </div>
+</section>

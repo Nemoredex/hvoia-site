@@ -1,0 +1,46 @@
+---
+/**
+ * Фото первого экрана — LCP-картинка: eager + fetchpriority="high", srcset 1280/1920/≈2560, sizes=100vw.
+ * Для главной — арт-дирекция: вертикальный кадр на телефоне (<source media>).
+ */
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { HeroImage } from '../data/images';
+
+interface Props {
+  image: HeroImage;
+}
+const { image } = Astro.props;
+
+async function srcset(src: ImageMetadata, widths: number[]) {
+  const list = widths.filter((w) => w < src.width).concat(src.width);
+  const imgs = await Promise.all(list.map((width) => getImage({ src, width, format: 'webp' })));
+  return {
+    srcset: imgs.map((img, i) => `${img.src} ${list[i]}w`).join(', '),
+    fallback: imgs.find((_, i) => list[i] === 1920) ?? imgs[imgs.length - 1],
+  };
+}
+
+const desktop = await srcset(image.src, [1280, 1920]);
+const mobile = image.mobile ? await srcset(image.mobile, [900]) : null;
+const style = image.position ? `object-position:${image.position}` : undefined;
+---
+
+<picture>
+  {mobile && image.mobile && (
+    <source media="(max-width: 760px)" srcset={mobile.srcset} sizes="100vw" width={image.mobile.width} height={image.mobile.height} />
+  )}
+  <img
+    class="hero__img"
+    src={desktop.fallback.src}
+    srcset={desktop.srcset}
+    sizes="100vw"
+    alt={image.alt}
+    width={image.src.width}
+    height={image.src.height}
+    fetchpriority="high"
+    loading="eager"
+    decoding="async"
+    style={style}
+  />
+</picture>

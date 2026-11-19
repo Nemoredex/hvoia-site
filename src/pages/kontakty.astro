@@ -1,0 +1,40 @@
+---
+/** Как добраться: порядок блоков — как в _materials/kontakty.html. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Route from '../components/Route.astro';
+import ContactBoard from '../components/ContactBoard.astro';
+import Steps from '../components/Steps.astro';
+import Requisites from '../components/Requisites.astro';
+import LeadForm from '../components/LeadForm.astro';
+import { pages } from '../data/seo';
+import { heroes } from '../data/images';
+import company from '../data/company.json';
+
+const { address } = company;
+const howTo = [
+  { title: 'На&nbsp;машине', text: `≈ ${address.fromCity}. [Маршрут: трасса, поворот, ориентиры]` },
+  { title: 'На&nbsp;такси', text: '[Примерная стоимость и время из центра Воронежа]' },
+  { title: 'Парковка', text: '[Сколько машин помещается на территории]' },
+];
+---
+
+<BaseLayout seo={pages.kontakty}>
+  <PageHero
+    path="/kontakty/"
+    image={heroes.kontakty}
+    edge="road"
+    headerCta="#contacts"
+    title="Как добраться"
+    lead="30 минут от Воронежа — и вы в сосновом лесу у реки Воронеж."
+    facts={[address.locality, address.district, '≈ 30 минут на машине']}
+  />
+  <Route sectionClass="section container" />
+  <ContactBoard />
+  <section class="section container">
+    <h2 class="title-lg" style="margin-bottom:48px">Как доехать</h2>
+    <Steps items={howTo} />
+  </section>
+  <Requisites />
+  <LeadForm title="Расскажите, что планируете" />
+</BaseLayout>

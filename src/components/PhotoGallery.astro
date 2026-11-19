@@ -1,0 +1,48 @@
+---
+/**
+ * /foto/: фильтр «Дом / Территория / Праздники / Зима». Все фото есть в HTML сразу,
+ * фильтр только скрывает лишние — поисковик видит всю галерею.
+ */
+import Img from './Img.astro';
+import { categories, gallery } from '../data/gallery';
+import { photo } from '../data/images';
+---
+
+<section class="section container">
+  <div class="filter" role="group" aria-label="Фильтр фото" data-filter="#photo-grid">
+    {categories.map((c, i) => (
+      <button type="button" class="chip chip--light" data-filter-value={c.id} aria-pressed={i === 0 ? 'true' : 'false'}>{c.label}</button>
+    ))}
+  </div>
+  <div class="gallery" id="photo-grid">
+    {gallery.map((g) => (
+      <figure class={g.layout === 'wide' ? 'is-wide' : undefined} data-audience={g.tags.join(' ')}>
+        <Img
+          class={g.layout === 'arch' ? 'is-arch' : undefined}
+          src={photo(g.image)}
+          alt={g.alt}
+          sizes={g.layout === 'wide' ? '(max-width: 520px) 100vw, 50vw' : '(max-width: 520px) 100vw, (max-width: 760px) 50vw, 25vw'}
+        />
+        <figcaption>{g.caption ?? g.alt}</figcaption>
+      </figure>
+    ))}
+  </div>
+</section>
+
+<script>
+  // main.js прототипа, блок 2.
+  document.querySelectorAll<HTMLElement>('[data-filter]').forEach((group) => {
+    const list = document.querySelector(group.dataset.filter ?? '');
+    if (!list) return;
+    const buttons = group.querySelectorAll<HTMLButtonElement>('[data-filter-value]');
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const value = btn.dataset.filterValue!;
+        buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+        list.querySelectorAll<HTMLElement>('[data-audience]').forEach((item) => {
+          item.hidden = value !== 'all' && !item.dataset.audience!.split(' ').includes(value);
+        });
+      });
+    });
+  });
+</script>

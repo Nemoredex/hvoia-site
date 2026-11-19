@@ -1,0 +1,29 @@
+---
+/** Первый экран главной: фото + шапка + проверка дат. Переход «Лес»: два ряда сосен. */
+import HeroPicture from './HeroPicture.astro';
+import Header from './Header.astro';
+import BookForm from './BookForm.astro';
+import { heroes } from '../data/images';
+
+interface Props {
+  title: string;
+  lead: string;
+}
+const { title, lead } = Astro.props;
+---
+
+<section class="hero">
+  <HeroPicture image={heroes.home} />
+  <div class="hero__shade" aria-hidden="true"></div>
+  <Header ctaHref="#book" />
+  <div class="hero__inner">
+    <div class="hero__text">
+      <h1 class="title-xl" set:html={title} />
+      <p class="hero__lead">{lead}</p>
+    </div>
+    <BookForm id="book" />
+  </div>
+  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="trees trees--back" aria-hidden="true"></div>
+  <div class="trees trees--front" aria-hidden="true"></div>
+</section>

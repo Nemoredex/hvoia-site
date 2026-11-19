@@ -1,0 +1,29 @@
+---
+/** Короткая галерея из трёх фото: «Как здесь бывает» (главная), «Как это выглядит» (свадьбы). */
+import Img from './Img.astro';
+import SectionHead from './SectionHead.astro';
+import { photo } from '../data/images';
+
+interface Props {
+  title: string;
+  items: { image: string; alt: string; layout?: 'wide' | 'arch' }[];
+  id?: string;
+  style?: string;
+}
+const { title, items, id, style } = Astro.props;
+---
+
+<section class="section container" id={id} style={style}>
+  <SectionHead title={title} link={{ href: '/foto/', label: 'Все фото' }} />
+  <div class="gallery">
+    {items.map((it) => (
+      <Img
+        class={it.layout === 'wide' ? 'is-wide' : it.layout === 'arch' ? 'is-arch' : undefined}
+        src={photo(it.image)}
+        alt={it.alt}
+        sizes={it.layout === 'wide' ? '(max-width: 520px) 100vw, 50vw' : '(max-width: 520px) 100vw, (max-width: 760px) 50vw, 25vw'}
+      />
+    ))}
+  </div>
+  <slot />
+</section>

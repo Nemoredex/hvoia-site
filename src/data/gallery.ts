@@ -18,24 +18,28 @@ export interface GalleryItem {
   image: PhotoKey;
   alt: string;
   tags: CategoryId[];
+  /** Подпись под фото, если отличается от alt. */
+  caption?: string;
+  /** wide — на две колонки, arch — арка (как в прототипе). */
+  layout?: 'wide' | 'arch';
 }
 
 export const gallery: GalleryItem[] = [
-  { image: 'aerial', alt: 'Территория сверху', tags: ['territory'] },
-  { image: 'house-sunset', alt: 'Коттедж и тёплый бассейн на закате', tags: ['house', 'territory'] },
-  { image: 'wedding-arch', alt: 'Свадебная арка', tags: ['events'] },
+  { image: 'aerial', alt: 'Территория сверху', tags: ['territory'], layout: 'wide' },
+  { image: 'house-sunset', alt: 'Коттедж и тёплый бассейн на закате', caption: 'Коттедж и бассейн на закате', tags: ['house', 'territory'] },
+  { image: 'wedding-arch', alt: 'Свадебная арка', tags: ['events'], layout: 'arch' },
   { image: 'kitchen', alt: 'Кухня-гостиная', tags: ['house'] },
   { image: 'bedroom', alt: 'Спальня с видом на сосны', tags: ['house'] },
   { image: 'banya', alt: 'Русская баня', tags: ['territory'] },
-  { image: 'chan', alt: 'Банный чан зимой', tags: ['territory', 'winter'] },
+  { image: 'chan', alt: 'Банный чан зимой', tags: ['territory', 'winter'], layout: 'arch' },
   { image: 'gazebo', alt: 'Беседка с мангалом', tags: ['territory'] },
-  { image: 'tent-banquet', alt: 'Шатёр к банкету', tags: ['events'] },
+  { image: 'tent-banquet', alt: 'Шатёр к банкету', tags: ['events'], layout: 'wide' },
   { image: 'tent-party', alt: 'Праздник в шатре', tags: ['events'] },
   { image: 'house-winter', alt: 'Коттедж зимой', tags: ['house', 'winter'] },
   { image: 'pool-day', alt: 'Бассейн днём', tags: ['territory'] },
   { image: 'bathroom', alt: 'Санузел', tags: ['house'] },
   { image: 'wedding-decor', alt: 'Декор стола', tags: ['events'] },
   { image: 'birthday', alt: 'День рождения', tags: ['events'] },
-  { image: 'tent-night', alt: 'Шатёр вечером', tags: ['events'] },
+  { image: 'tent-night', alt: 'Шатёр вечером', tags: ['events'], layout: 'wide' },
   { image: 'corporate', alt: 'Корпоратив', tags: ['events'] },
 ];

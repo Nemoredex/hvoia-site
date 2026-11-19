@@ -1,0 +1,26 @@
+---
+/** Свадьбы: тёплый шатёр на тёмной полосе. */
+import DarkBand from './DarkBand.astro';
+import Img from './Img.astro';
+import Icon from './Icon.astro';
+import events from '../data/events.json';
+import { photo } from '../data/images';
+
+const { tent } = events;
+const nb = (s: string) => s.replace(/^(До|в) /, '$1 ').replace(/ в доме$/, ' в доме');
+---
+
+<DarkBand left>
+  <div class="split">
+    <div class="split__text">
+      <h2 class="title-lg">Тёплый шатёр на&nbsp;{tent.area}&nbsp;м²</h2>
+      <p class="on-dark">{tent.summary}</p>
+      <div class="amenities amenities--dark">
+        {tent.features.map((f) => (
+          <div class="amenity"><span class="amenity__icon"><Icon name="check" size={18} /></span><div><h3>{nb(f.title)}</h3><p>{f.text}</p></div></div>
+        ))}
+      </div>
+    </div>
+    <Img class="split__img" src={photo('tent-night')} alt="Шатёр вечером, огни среди сосен" sizes="(max-width: 960px) 100vw, 50vw" />
+  </div>
+</DarkBand>

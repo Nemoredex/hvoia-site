@@ -1,0 +1,78 @@
+---
+/**
+ * Организатор + заявка. Отправка пока демо, как в прототипе (main.js, блок 3):
+ * на этапе 7 (PLAN.md) — POST на /api/lead → Telegram и почта, honeypot и SmartCaptcha.
+ */
+import Img from './Img.astro';
+import Icon from './Icon.astro';
+import company from '../data/company.json';
+import { href } from '../lib/url';
+import branch from '../assets/img/decor/branch.webp';
+
+const reasons = ['Отдых в коттедже', 'Свадьба', 'День рождения или юбилей', 'Корпоратив', 'Другое'] as const;
+
+interface Props {
+  title: string;
+  reason?: (typeof reasons)[number];
+}
+const { title, reason = 'Отдых в коттедже' } = Astro.props;
+const { phones, messengers } = company;
+---
+
+<section class="section container" id="contacts">
+  <div class="lead">
+    <Img class="branch" src={branch} alt="" decorative widths={[561]} sizes="300px" style="right:-50px;bottom:-60px;width:300px;transform:scaleX(-1) rotate(10deg)" />
+    <div class="lead__person">
+      <div class="lead__photo-placeholder">Фото организатора или управляющего — нужно настоящее фото от заказчика</div>
+      <div class="lead__badge"><small>Ваш организатор</small><strong>[Имя Фамилия]</strong></div>
+    </div>
+    <form class="lead-form" id="contacts-form" action={href('/api/lead')} method="post" data-lead-form data-success="contacts-ok" novalidate aria-label="Заявка">
+      <h2 class="title-md" set:html={title} />
+      <p>Перезвоним в рабочее время: {company.hours.label}.</p>
+      <div class="field-row">
+        <label class="field">Как к вам обращаться<input class="input" type="text" name="name" autocomplete="name" /></label>
+        <label class="field">Телефон<input class="input" type="tel" name="phone" autocomplete="tel" inputmode="tel" required value="+7 " /></label>
+      </div>
+      <div class="field-row">
+        <label class="field">Что планируете<select class="input" name="reason">{reasons.map((r) => <option selected={r === reason}>{r}</option>)}</select></label>
+        <label class="field">Дата или период<input class="input" type="text" name="dates" placeholder="Например, 12–14 декабря…" /></label>
+      </div>
+      <button class="btn btn--amber btn--lg" type="submit"><span class="btn__icon"><Icon name="arrow" /></span>Отправить заявку</button>
+      <p class="lead-form__consent">Нажимая кнопку, вы соглашаетесь на <a href={href(company.docs.policy)}>обработку персональных данных</a>.</p>
+      <div class="lead__chips"><a class="chip" href={messengers.telegram}>Telegram</a><a class="chip" href={messengers.whatsapp}>WhatsApp</a><a class="chip" href={phones.events.href}>{phones.events.label}</a></div>
+    </form>
+    <div class="lead-form" id="contacts-ok" tabindex="-1" role="status" hidden>
+      <p class="title-md">Заявка отправлена</p>
+      <p>Демо-версия: на готовом сайте заявка сразу придёт менеджеру в Telegram и на почту.</p>
+      <button type="button" class="chip" data-form-again="contacts-form">Отправить ещё одну</button>
+    </div>
+  </div>
+</section>
+
+<script>
+  // main.js прототипа, блок 3. Этап 7: заменить на fetch POST в /api/lead.
+  document.querySelectorAll<HTMLFormElement>('[data-lead-form]').forEach((form) => {
+    const success = document.getElementById(form.dataset.success ?? '');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      form.hidden = true;
+      if (success) {
+        success.hidden = false;
+        success.focus();
+      }
+    });
+  });
+  document.querySelectorAll<HTMLButtonElement>('[data-form-again]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const form = document.getElementById(btn.dataset.formAgain ?? '') as HTMLFormElement | null;
+      if (!form) return;
+      form.reset();
+      form.hidden = false;
+      (btn.closest('[tabindex]') as HTMLElement).hidden = true;
+    });
+  });
+</script>

@@ -1,0 +1,23 @@
+---
+/** Тёмная полоса с силуэтом леса сверху и снизу (.packages): тарифы, шаги, шатёр. */
+import Img from './Img.astro';
+import treesGreen from '../assets/img/decor/trees-green.webp';
+import treesCream from '../assets/img/decor/trees-cream.webp';
+import branch from '../assets/img/decor/branch.webp';
+
+interface Props {
+  id?: string;
+  left?: boolean;
+  withBranch?: boolean;
+}
+const { id, left = false, withBranch = false } = Astro.props;
+---
+
+<section class="packages" id={id}>
+  <Img class="edge edge--top" src={treesGreen} alt="" decorative sizes="100vw" widths={[1440, 2880]} />
+  <Img class="edge edge--bottom" src={treesCream} alt="" decorative sizes="100vw" widths={[1440, 2880]} />
+  {withBranch && <Img class="branch" src={branch} alt="" decorative widths={[561]} sizes="260px" style="left:-40px;bottom:-30px;width:260px;opacity:.16;transform:rotate(20deg)" />}
+  <div class:list={['container', 'packages__inner', left && 'packages--left']}>
+    <slot />
+  </div>
+</section>

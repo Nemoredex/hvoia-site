@@ -1,0 +1,21 @@
+---
+/** Коттедж: цены проживания + форма дат. */
+import SectionHead from './SectionHead.astro';
+import PriceList from './PriceList.astro';
+import BookForm from './BookForm.astro';
+import company from '../data/company.json';
+import stay from '../data/stay.json';
+import { priceRows } from '../data/offers';
+import { rub } from '../lib/format';
+
+const { deposit } = stay;
+---
+
+<section class="section section--before-dark container" id="book-cottage">
+  <SectionHead title="Стоимость проживания" link={{ href: '/ceny/', label: 'Все цены и условия' }} />
+  <div class="price-card">
+    <PriceList rows={[...priceRows.stay.slice(0, 2), ...priceRows.extra]} />
+    <p class="price-card__note">Заселение с {company.checkin}, выезд до {company.checkout}. Возвратный залог: {rub(deposit.small.price)} до {deposit.guestsThreshold} гостей, {rub(deposit.large.price)} — больше.</p>
+  </div>
+  <div style="margin-top:20px"><BookForm id="book-cottage-form" /></div>
+</section>

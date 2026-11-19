@@ -1,0 +1,56 @@
+---
+/** Шапка-таблетка поверх первого экрана. Стоит внутри Hero/PageHero, как в прототипе. */
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import company from '../data/company.json';
+import { mainNav, mobileNav } from '../data/navigation';
+import { href } from '../lib/url';
+
+interface Props {
+  /** Куда ведёт главная кнопка: якорь формы на этой странице. */
+  ctaHref: string;
+  ctaLabel?: string;
+}
+const { ctaHref, ctaLabel = 'Забронировать' } = Astro.props;
+const current = Astro.url.pathname;
+const isCurrent = (path: string) => (href(path) === current ? 'page' : undefined);
+---
+
+<header class="site-header">
+  <div class="site-header__bar">
+    <a class="logo" href={href('/')} aria-label="Хвоя — на главную">
+      <svg width="24" height="28" viewBox="0 0 28 32" fill="none" stroke="#2E3A2B" stroke-width="1.8" aria-hidden="true"><path d="M14 2 L5 14 H10 L3 24 H25 L18 14 H23 Z" /><path d="M14 24 V30" /></svg>
+      <span class="logo__name">{company.shortName}</span>
+    </a>
+    <nav class="main-nav" aria-label="Основное меню">
+      {mainNav.map((l) => <a href={href(l.path)} aria-current={isCurrent(l.path)}>{l.label}</a>)}
+    </nav>
+    <div class="header-actions">
+      <a class="header-phone" href={company.phones.booking.href}>{company.phones.booking.label}</a>
+      <Button href={ctaHref}>{ctaLabel}</Button>
+      <button class="burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-nav" data-menu-toggle>
+        <Icon name="burger" size={22} />
+      </button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Мобильное меню" hidden>
+    {mobileNav.map((l) => <a href={href(l.path)} aria-current={isCurrent(l.path)}>{l.label}</a>)}
+  </nav>
+</header>
+
+<script>
+  // Мобильное меню (main.js прототипа, блок 1).
+  document.querySelectorAll<HTMLButtonElement>('[data-menu-toggle]').forEach((btn) => {
+    const menu = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+    if (!menu) return;
+    const set = (open: boolean) => {
+      btn.setAttribute('aria-expanded', String(open));
+      btn.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+      menu.hidden = !open;
+    };
+    btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
+    menu.addEventListener('click', (e) => {
+      if ((e.target as Element).closest('a')) set(false);
+    });
+  });
+</script>

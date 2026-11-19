@@ -1,0 +1,40 @@
+---
+/** Подвал с полосой тёмного леса. Коммерческие факторы: юрлицо, ИНН, ОГРН, адрес, телефоны, почта. */
+import Img from './Img.astro';
+import company from '../data/company.json';
+import { footerNav } from '../data/navigation';
+import { href } from '../lib/url';
+import treesDark from '../assets/img/decor/trees-dark.webp';
+
+const { legal, address, phones } = company;
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <Img class="edge edge--top" src={treesDark} alt="" decorative sizes="100vw" widths={[1440, 2880]} />
+  <div class="container site-footer__inner">
+    <div>
+      <span class="site-footer__brand">{company.shortName}</span>{legal.name}, ИНН {legal.inn}{legal.ogrn && <>, ОГРН {legal.ogrn}</>}<br />{address.full}
+    </div>
+    {footerNav.map((col) => (
+      <div>
+        <p class="site-footer__title">{col.title}</p>
+        <ul>
+          {col.links.map((l) => <li><a href={l.external ? l.path : href(l.path)}>{l.label}</a></li>)}
+        </ul>
+      </div>
+    ))}
+    <div>
+      <p class="site-footer__title">Связаться</p>
+      <ul>
+        <li><a href={phones.booking.href}>{phones.booking.label}</a></li>
+        <li><a href={phones.events.href}>{phones.events.label}</a></li>
+        <li><a href={`mailto:${company.email}`}>{company.email}</a></li>
+        <li>{company.hours.label}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="container site-footer__bottom">
+    <span>© {year} {company.name}</span><a href={href(company.docs.policy)}>Политика конфиденциальности</a>
+  </div>
+</footer>

@@ -1,0 +1,27 @@
+---
+/** Цены: четыре карточки прайса. Все цены открыты в HTML, без вкладок — их видит поисковик. */
+import PriceList from './PriceList.astro';
+import company from '../data/company.json';
+import { priceRows } from '../data/offers';
+---
+
+<section class="section container">
+  <div class="price-card">
+    <h2 class="price-card__title">Проживание в&nbsp;коттедже</h2>
+    <PriceList rows={priceRows.stay} />
+  </div>
+  <div class="price-card">
+    <h2 class="price-card__title">Дополнительные гости и&nbsp;скидки</h2>
+    <PriceList rows={priceRows.extra} />
+  </div>
+  <div class="price-card">
+    <h2 class="price-card__title">Залог и&nbsp;бронирование</h2>
+    <PriceList rows={priceRows.booking} />
+    <p class="price-card__note">Залог возвратный. Заселение с {company.checkin}, выезд до {company.checkout}.</p>
+  </div>
+  <div class="price-card">
+    <h2 class="price-card__title">Свадьбы и&nbsp;праздники</h2>
+    <PriceList rows={priceRows.events} />
+    <p class="price-card__note">Смету собирает организатор под ваш бюджет и число гостей.</p>
+  </div>
+</section>

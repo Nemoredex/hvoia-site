@@ -1,10 +1,53 @@
 ---
-// Временное наполнение: каркас этапа 1. Настоящая главная — этап 3 (PLAN.md).
+/** Главная: порядок блоков — как в _materials/index.html. */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import TwoPaths from '../components/TwoPaths.astro';
+import TerritoryBento from '../components/TerritoryBento.astro';
+import Route from '../components/Route.astro';
+import Packages from '../components/Packages.astro';
+import BookingSteps from '../components/BookingSteps.astro';
+import GalleryStrip from '../components/GalleryStrip.astro';
+import ReviewsWidget from '../components/ReviewsWidget.astro';
+import Faq from '../components/Faq.astro';
+import LeadForm from '../components/LeadForm.astro';
 import { pages } from '../data/seo';
+import { faqHome } from '../data/faq';
+import stay from '../data/stay.json';
+import events from '../data/events.json';
+
+const [pool, banya, chan, gazebo] = stay.territory;
+const bedrooms = stay.house.rooms[0];
 ---
 
-<BaseLayout seo={pages.home}>
-  <h1>Дом в соснах для отдыха и праздников</h1>
-  <p>Сайт в разработке.</p>
+<BaseLayout seo={pages.home} mbar={{ href: '#book', label: 'Даты' }}>
+  <Hero
+    title="Дом в&nbsp;соснах для&nbsp;отдыха и&nbsp;праздников"
+    lead={`Гостевой дом «Хвоя» в 30 минутах от Воронежа: коттедж на ${stay.house.guests} гостей с баней, чаном и тёплым бассейном, шатёр для праздников до ${events.tent.capacity} человек.`}
+  />
+  <TwoPaths />
+  <TerritoryBento
+    fade={`${stay.house.area} м²`}
+    title="Всё на&nbsp;одной территории"
+    lead={`${stay.house.summary} Территория сдаётся целиком.`}
+    big={{ ...pool, alt: 'Тёплый бассейн 7×4 м днём' }}
+    cards={[banya, chan, { ...gazebo, title: 'Беседка и&nbsp;мангал' }, bedrooms]}
+  />
+  <Route sectionClass="section section--tight section--before-dark container" id="route" />
+  <Packages />
+  <BookingSteps />
+  <GalleryStrip
+    id="gallery"
+    style="padding-top:48px;padding-bottom:96px"
+    title="Как здесь бывает"
+    items={[
+      { image: 'aerial', alt: 'Территория сверху: дом, бассейн, шатёр и беседка', layout: 'wide' },
+      { image: 'tent-party', alt: 'Праздник в шатре', layout: 'arch' },
+      { image: 'tent-banquet', alt: 'Шатёр, накрытый к банкету' },
+    ]}
+  >
+    <ReviewsWidget />
+  </GalleryStrip>
+  <Faq title="Частые вопросы" items={faqHome} />
+  <LeadForm title="Расскажите, что планируете" />
 </BaseLayout>

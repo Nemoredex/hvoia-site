@@ -1,0 +1,29 @@
+---
+/** Фото: порядок блоков — как в _materials/foto.html. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import PhotoGallery from '../components/PhotoGallery.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ReviewsWidget from '../components/ReviewsWidget.astro';
+import LeadForm from '../components/LeadForm.astro';
+import { pages } from '../data/seo';
+import { heroes } from '../data/images';
+import company from '../data/company.json';
+---
+
+<BaseLayout seo={pages.foto}>
+  <PageHero
+    path="/foto/"
+    image={heroes.foto}
+    edge="frame"
+    headerCta="#contacts"
+    title="Фото"
+    lead="Дом, территория и праздники в разные сезоны."
+  />
+  <PhotoGallery />
+  <section class="section container">
+    <SectionHead title="Отзывы гостей" link={{ href: company.yandexMaps.url, label: 'Отзывы на Яндекс Картах' }} />
+    <ReviewsWidget />
+  </section>
+  <LeadForm title="Расскажите, что планируете" />
+</BaseLayout>
