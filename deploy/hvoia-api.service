@@ -1,0 +1,28 @@
+# systemd: Node-процесс для POST /api/lead/. Статику отдаёт nginx, этот процесс — только заявки.
+# Установка:
+#   sudo cp deploy/hvoia-api.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now hvoia-api
+# Логи: journalctl -u hvoia-api -f
+[Unit]
+Description=Hvoia site API (lead form)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/hvoia
+EnvironmentFile=/var/www/hvoia/.env
+Environment=HOST=127.0.0.1
+Environment=PORT=4321
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node dist/server/entry.mjs
+Restart=on-failure
+RestartSec=3
+User=www-data
+Group=www-data
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/var/www/hvoia/node_modules/.astro
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

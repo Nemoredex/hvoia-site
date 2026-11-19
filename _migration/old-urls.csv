@@ -17,4 +17,26 @@ https://www.hvoia-event.ru/service;Услуги | «Xвoя»;/;список ус
 https://www.hvoia-event.ru/services;Услуги | «Xвoя»;/;список услуг, нет в sitemap
 https://www.hvoia-event.ru/policy;-;/politika-konfidencialnosti/;ссылка из прототипа, нет в sitemap
 https://www.hvoia-event.ru/sites/default/files/service/2025/%D0%9F%D1%80%D0%B0%D0%B2%D0%B8%D0%BB%D0%B0%20%D0%BF%D1%80%D0%BE%D0%B6%D0%B8%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F.pdf;Правила проживания (PDF);/docs/pravila-prozhivaniya.pdf;PDF получить у заказчика
-https://www.hvoia-event.ru/node/*;дубли Drupal;по canonical узла;/node/1 → /, /node/2 → /kottedzh/ и т. д. Полный список узлов — из Вебмастера
+https://www.hvoia-event.ru/slide/khvoya-zagorodnoe-prostranstvo-dlya-prazdnikov-otdykha-i-vazhnykh-sobytiy;слайд главной;/;нет в sitemap, найден через /node/10
+https://www.hvoia-event.ru/slide/khvoya-zagorodnoe-prostranstvo-dlya-prazdnikov-otdykha-i-vazhnykh-sobytiy-0;слайд главной;/;/node/11
+https://www.hvoia-event.ru/slide/khvoya-zagorodnoe-prostranstvo-dlya-prazdnikov-otdykha-i-vazhnykh-sobytiy-1;слайд главной;/;/node/12
+https://www.hvoia-event.ru/dokumenty;Документы;/kontakty/;реквизиты и документы, /node/13
+https://www.hvoia-event.ru/pravila-zaseleniya;Правила заселения;/kottedzh/;заезд/выезд — FAQ коттеджа, /node/14
+https://www.hvoia-event.ru/usloviya-bronirovaniya;Условия бронирования;/ceny/;залог и бронирование, /node/15
+https://www.hvoia-event.ru/stoimost;Стоимость;/ceny/;/node/16
+https://www.hvoia-event.ru/node/1;дубль Drupal;/;по canonical узла (проверено 20.11.2026)
+https://www.hvoia-event.ru/node/2;дубль Drupal;/kottedzh/;по canonical узла (проверено 20.11.2026)
+https://www.hvoia-event.ru/node/3;дубль Drupal;/kottedzh/;по canonical узла (проверено 20.11.2026)
+https://www.hvoia-event.ru/node/4;дубль Drupal;/kottedzh/;по canonical узла (проверено 20.11.2026)
+https://www.hvoia-event.ru/node/5;дубль Drupal;/kottedzh/;по canonical узла (проверено 20.11.2026)
+https://www.hvoia-event.ru/node/6;дубль Drupal;/kottedzh/;по canonical узла (проверено 20.11.2026)
+https://www.hvoia-event.ru/node/7;дубль Drupal;/prazdniki/;по canonical узла (проверено 20.11.2026)
+https://www.hvoia-event.ru/node/8;дубль Drupal;/kottedzh/;по canonical узла (проверено 20.11.2026)
+https://www.hvoia-event.ru/node/9;дубль Drupal;/svadby/;по canonical узла (проверено 20.11.2026)
+https://www.hvoia-event.ru/node/10;дубль Drupal;/;по canonical узла (проверено 20.11.2026)
+https://www.hvoia-event.ru/node/11;дубль Drupal;/;по canonical узла (проверено 20.11.2026)
+https://www.hvoia-event.ru/node/12;дубль Drupal;/;по canonical узла (проверено 20.11.2026)
+https://www.hvoia-event.ru/node/13;дубль Drupal;/kontakty/;по canonical узла (проверено 20.11.2026)
+https://www.hvoia-event.ru/node/14;дубль Drupal;/kottedzh/;по canonical узла (проверено 20.11.2026)
+https://www.hvoia-event.ru/node/15;дубль Drupal;/ceny/;по canonical узла (проверено 20.11.2026)
+https://www.hvoia-event.ru/node/16;дубль Drupal;/ceny/;по canonical узла (проверено 20.11.2026)
