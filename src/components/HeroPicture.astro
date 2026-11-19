@@ -1,7 +1,11 @@
 ---
 /**
- * Фото первого экрана — LCP-картинка: eager + fetchpriority="high", srcset 1280/1920/≈2560, sizes=100vw.
+ * Фото первого экрана — LCP-картинка: eager + fetchpriority="high", sizes=100vw (как в прототипе).
+ * Ширины 640…2560 с шагом, чтобы на 1440 px браузер брал 1600, а не 1920 (минус ~30% веса).
+ * Качество 72: фото лежит под затемнением .hero__shade, разницы не видно.
  * Для главной — арт-дирекция: вертикальный кадр на телефоне (<source media>).
+ * Preload не нужен: <img> стоит в начале HTML, его сразу находит preload-сканер браузера,
+ * а preload при арт-дирекции рискует скачать оба кадра.
  */
 import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -14,15 +18,15 @@ const { image } = Astro.props;
 
 async function srcset(src: ImageMetadata, widths: number[]) {
   const list = widths.filter((w) => w < src.width).concat(src.width);
-  const imgs = await Promise.all(list.map((width) => getImage({ src, width, format: 'webp' })));
+  const imgs = await Promise.all(list.map((width) => getImage({ src, width, format: 'webp', quality: 72 })));
   return {
     srcset: imgs.map((img, i) => `${img.src} ${list[i]}w`).join(', '),
-    fallback: imgs.find((_, i) => list[i] === 1920) ?? imgs[imgs.length - 1],
+    fallback: imgs.find((_, i) => list[i] === 1600) ?? imgs[imgs.length - 1],
   };
 }
 
-const desktop = await srcset(image.src, [1280, 1920]);
-const mobile = image.mobile ? await srcset(image.mobile, [900]) : null;
+const desktop = await srcset(image.src, [640, 960, 1280, 1600, 1920]);
+const mobile = image.mobile ? await srcset(image.mobile, [640, 900, 1200]) : null;
 const style = image.position ? `object-position:${image.position}` : undefined;
 ---
 

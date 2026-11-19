@@ -15,6 +15,7 @@ interface Props {
   /** Декор: пустой alt + aria-hidden. */
   decorative?: boolean;
   style?: string;
+  quality?: number;
 }
 
 const {
@@ -25,10 +26,11 @@ const {
   widths,
   decorative = false,
   style,
+  quality = 75,
 } = Astro.props;
 
 const list = (widths ?? [480, 800, 1200, 1600]).filter((w) => w <= src.width);
-if (!list.includes(src.width) && list.length === 0) list.push(src.width);
+if (list.length === 0) list.push(src.width);
 ---
 
 <Image
@@ -40,5 +42,6 @@ if (!list.includes(src.width) && list.length === 0) list.push(src.width);
   sizes={sizes}
   loading="lazy"
   decoding="async"
+  quality={quality}
   style={style}
 />

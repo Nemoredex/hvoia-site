@@ -16,7 +16,7 @@ import stay from '../data/stay.json';
 const { prices, booking } = stay;
 ---
 
-<BaseLayout seo={pages.ceny} mbar={{ href: '#book-prices', label: 'Заявка' }}>
+<BaseLayout seo={pages.ceny} ogImage={heroes.ceny.src} mbar={{ href: '#book-prices', label: 'Заявка' }}>
   <PageHero
     path="/ceny/"
     image={heroes.ceny}
