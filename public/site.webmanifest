@@ -1,0 +1,11 @@
+{
+  "name": "Гостевой дом «Хвоя»",
+  "short_name": "Хвоя",
+  "icons": [
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ],
+  "theme_color": "#2E3A2B",
+  "background_color": "#F5F1E6",
+  "display": "browser"
+}

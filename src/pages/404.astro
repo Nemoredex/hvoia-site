@@ -1,0 +1,11 @@
+---
+// 404: noindex, без canonical. Хостинг должен отдавать её с кодом 404 (этап 6).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { pages } from '../data/seo';
+import { href } from '../lib/url';
+---
+
+<BaseLayout seo={pages.notFound}>
+  <h1>Страница не найдена</h1>
+  <p><a href={href('/')}>На главную</a></p>
+</BaseLayout>

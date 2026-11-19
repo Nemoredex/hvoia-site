@@ -1,16 +1,10 @@
 ---
-// Временная заглушка этапа 0. Настоящая главная — этап 3 (PLAN.md).
+// Временное наполнение: каркас этапа 1. Настоящая главная — этап 3 (PLAN.md).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { pages } from '../data/seo';
 ---
-<!doctype html>
-<html lang="ru">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex, nofollow" />
-    <title>Гостевой дом «Хвоя» — сайт в разработке</title>
-  </head>
-  <body>
-    <h1>Гостевой дом «Хвоя»</h1>
-    <p>Сайт в разработке.</p>
-  </body>
-</html>
+
+<BaseLayout seo={pages.home}>
+  <h1>Дом в соснах для отдыха и праздников</h1>
+  <p>Сайт в разработке.</p>
+</BaseLayout>

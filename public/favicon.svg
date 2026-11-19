@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Знак логотипа из прототипа: кремовая ёлка на тёмно-зелёном. Цвета = токены c-forest и c-cream из global.css. -->
+  <rect width="64" height="64" rx="14" fill="#2E3A2B"/>
+  <g transform="translate(11 8) scale(1.5)" fill="none" stroke="#F5F1E6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 2 L5 14 H10 L3 24 H25 L18 14 H23 Z"/>
+    <path d="M14 24 V30"/>
+  </g>
+</svg>
