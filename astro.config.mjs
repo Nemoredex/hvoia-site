@@ -18,7 +18,8 @@ export default defineConfig({
   site,
   base,
   trailingSlash: 'always',
-  build: { format: 'directory' },
+  // CSS (≈6 КБ gzip) встраивается в HTML: на первом визите из поиска нет блокирующего запроса перед отрисовкой.
+  build: { format: 'directory', inlineStylesheets: 'always' },
   adapter: node({ mode: 'standalone' }),
   integrations: [sitemap({ filter: (page) => !page.includes('/api/') })],
 });
