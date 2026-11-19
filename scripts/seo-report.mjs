@@ -5,7 +5,8 @@ import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from '
 import { join, relative, sep } from 'node:path';
 
 const ROOT = process.cwd();
-const DIST = join(ROOT, 'dist');
+// С адаптером @astrojs/node статика лежит в dist/client.
+const DIST = existsSync(join(ROOT, 'dist', 'client')) ? join(ROOT, 'dist', 'client') : join(ROOT, 'dist');
 const PREVIEW = 'http://localhost:4322';
 const strict = process.argv.includes('--strict');
 

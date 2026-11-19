@@ -1,6 +1,7 @@
 ---
-/** Контакты + место под Яндекс Карту (этап 7: виджет с ленивой загрузкой). */
+/** Контакты + Яндекс Карта организации (грузится, когда блок подходит к экрану). */
 import Button from './Button.astro';
+import LazyFrame from './LazyFrame.astro';
 import company from '../data/company.json';
 
 const { address, phones, messengers } = company;
@@ -19,7 +20,7 @@ const { address, phones, messengers } = company;
       <div class="contact-row"><small>Работаем</small><span class="contact-row__value">{company.hours.label}</span><span class="muted">Заселение с {company.checkin}, выезд до {company.checkout}</span></div>
     </address>
     <div class="map-card">
-      <span class="map-card__note">[Яндекс Карта]</span>
+      <LazyFrame class="map-card__frame" src={company.yandexMaps.mapWidget} title={`${company.name} на Яндекс Картах`} />
       <div class="map-card__pin">
         <span>{address.street}</span>
         <svg width="40" height="54" viewBox="0 0 40 54" aria-hidden="true"><path d="M20 0a20 20 0 0 1 20 20c0 16-20 34-20 34S0 36 0 20A20 20 0 0 1 20 0Z" fill="#E3A33B" /><circle cx="20" cy="20" r="7" fill="#232A20" /></svg>

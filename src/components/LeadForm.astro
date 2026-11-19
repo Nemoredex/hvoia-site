@@ -1,22 +1,25 @@
 ---
 /**
- * Организатор + заявка. Отправка пока демо, как в прототипе (main.js, блок 3):
- * на этапе 7 (PLAN.md) — POST на /api/lead → Telegram и почта, honeypot и SmartCaptcha.
+ * Организатор + заявка. POST на /api/lead/ (src/pages/api/lead.ts) → Telegram и/или почта.
+ * Защита: honeypot-поле website, ограничение частоты на сервере, Яндекс SmartCaptcha —
+ * если задан PUBLIC_SMARTCAPTCHA_CLIENT_KEY (скрипт капчи грузится только при первом касании формы).
+ * Если сервер недоступен или не настроен — показываем телефоны и мессенджеры, заявка не теряется молча.
+ * Без JS форма уходит обычным POST (сервер ответит JSON — запасной путь, не основной).
  */
 import Img from './Img.astro';
 import Icon from './Icon.astro';
 import company from '../data/company.json';
 import { href } from '../lib/url';
+import { REASONS } from '../lib/lead';
 import branch from '../assets/img/decor/branch.webp';
-
-const reasons = ['Отдых в коттедже', 'Свадьба', 'День рождения или юбилей', 'Корпоратив', 'Другое'] as const;
 
 interface Props {
   title: string;
-  reason?: (typeof reasons)[number];
+  reason?: (typeof REASONS)[number];
 }
 const { title, reason = 'Отдых в коттедже' } = Astro.props;
 const { phones, messengers } = company;
+const captchaKey = import.meta.env.PUBLIC_SMARTCAPTCHA_CLIENT_KEY;
 ---
 
 <section class="section container" id="contacts">
@@ -26,46 +29,93 @@ const { phones, messengers } = company;
       <div class="lead__photo-placeholder">Фото организатора или управляющего — нужно настоящее фото от заказчика</div>
       <div class="lead__badge"><small>Ваш организатор</small><strong>[Имя Фамилия]</strong></div>
     </div>
-    <form class="lead-form" id="contacts-form" action={href('/api/lead')} method="post" data-lead-form data-success="contacts-ok" novalidate aria-label="Заявка">
+    <form class="lead-form" id="contacts-form" action={href('/api/lead/')} method="post" data-lead-form data-success="contacts-ok" data-captcha={captchaKey || undefined} data-fallback={`Не получилось отправить заявку. Позвоните ${phones.booking.label} или напишите в Telegram/WhatsApp — ответим сразу.`} novalidate aria-label="Заявка">
       <h2 class="title-md" set:html={title} />
       <p>Перезвоним в рабочее время: {company.hours.label}.</p>
       <div class="field-row">
-        <label class="field">Как к вам обращаться<input class="input" type="text" name="name" autocomplete="name" /></label>
-        <label class="field">Телефон<input class="input" type="tel" name="phone" autocomplete="tel" inputmode="tel" required value="+7 " /></label>
+        <label class="field">Как к вам обращаться<input class="input" type="text" name="name" autocomplete="name" maxlength="80" /></label>
+        <label class="field">Телефон<input class="input" type="tel" name="phone" autocomplete="tel" inputmode="tel" required value="+7 " maxlength="40" /></label>
       </div>
       <div class="field-row">
-        <label class="field">Что планируете<select class="input" name="reason">{reasons.map((r) => <option selected={r === reason}>{r}</option>)}</select></label>
-        <label class="field">Дата или период<input class="input" type="text" name="dates" placeholder="Например, 12–14 декабря…" /></label>
+        <label class="field">Что планируете<select class="input" name="reason">{REASONS.map((r) => <option selected={r === reason}>{r}</option>)}</select></label>
+        <label class="field">Дата или период<input class="input" type="text" name="dates" placeholder="Например, 12–14 декабря…" maxlength="120" /></label>
       </div>
+      {/* Honeypot: скрыто от людей и скринридеров, боты заполняют. */}
+      <div class="visually-hidden" aria-hidden="true"><label>Сайт<input type="text" name="website" tabindex="-1" autocomplete="off" /></label></div>
+      <input type="hidden" name="page" value={Astro.url.pathname} />
+      {captchaKey && <div class="lead-form__captcha" data-captcha-slot></div>}
       <button class="btn btn--amber btn--lg" type="submit"><span class="btn__icon"><Icon name="arrow" /></span>Отправить заявку</button>
+      <p class="lead-form__error" role="alert" hidden data-lead-error></p>
       <p class="lead-form__consent">Нажимая кнопку, вы соглашаетесь на <a href={href(company.docs.policy)}>обработку персональных данных</a>.</p>
       <div class="lead__chips"><a class="chip" href={messengers.telegram}>Telegram</a><a class="chip" href={messengers.whatsapp}>WhatsApp</a><a class="chip" href={phones.events.href}>{phones.events.label}</a></div>
     </form>
     <div class="lead-form" id="contacts-ok" tabindex="-1" role="status" hidden>
       <p class="title-md">Заявка отправлена</p>
-      <p>Демо-версия: на готовом сайте заявка сразу придёт менеджеру в Telegram и на почту.</p>
+      <p>Спасибо! Перезвоним в рабочее время: {company.hours.label}. Если срочно — звоните: <a href={phones.booking.href} style="color:#fff">{phones.booking.label}</a>.</p>
       <button type="button" class="chip" data-form-again="contacts-form">Отправить ещё одну</button>
     </div>
   </div>
 </section>
 
 <script>
-  // main.js прототипа, блок 3. Этап 7: заменить на fetch POST в /api/lead.
+
+  // SmartCaptcha грузится только при первом взаимодействии с формой (не мешает LCP).
+  function loadCaptcha(form: HTMLFormElement) {
+    const key = form.dataset.captcha;
+    const slot = form.querySelector<HTMLElement>('[data-captcha-slot]');
+    if (!key || !slot || slot.dataset.loaded) return;
+    slot.dataset.loaded = '1';
+    const s = document.createElement('script');
+    s.src = 'https://smartcaptcha.yandexcloud.net/captcha.js?render=onload&onload=__hvoiaCaptcha';
+    s.defer = true;
+    (window as unknown as Record<string, unknown>).__hvoiaCaptcha = () => {
+      (window as unknown as { smartCaptcha: { render: (el: HTMLElement, o: object) => void } }).smartCaptcha.render(slot, { sitekey: key, hl: 'ru' });
+    };
+    document.head.append(s);
+  }
+
   document.querySelectorAll<HTMLFormElement>('[data-lead-form]').forEach((form) => {
     const success = document.getElementById(form.dataset.success ?? '');
-    form.addEventListener('submit', (e) => {
+    const fallback = form.dataset.fallback ?? '';
+    const error = form.querySelector<HTMLElement>('[data-lead-error]')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    form.addEventListener('focusin', () => loadCaptcha(form), { once: true });
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      error.hidden = true;
       if (!form.checkValidity()) {
         form.reportValidity();
         return;
       }
-      form.hidden = true;
-      if (success) {
-        success.hidden = false;
-        success.focus();
+      const phone = form.querySelector<HTMLInputElement>('[name="phone"]')!;
+      if (phone.value.replace(/\D/g, '').length < 10) {
+        error.textContent = 'Проверьте номер телефона: нужно 10–11 цифр.';
+        error.hidden = false;
+        phone.focus();
+        return;
+      }
+      button.disabled = true;
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+        const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+        if (!res.ok || !data.ok) throw new Error(res.status === 503 || !data.error ? fallback : data.error);
+        form.hidden = true;
+        if (success) {
+          success.hidden = false;
+          success.focus();
+        }
+        (window as unknown as { ym?: (...a: unknown[]) => void }).ym?.(Number(document.documentElement.dataset.metrika), 'reachGoal', 'lead');
+      } catch (err) {
+        // TypeError — сеть или сервер недоступны: показываем телефоны, а не техническое сообщение браузера.
+        error.textContent = err instanceof Error && !(err instanceof TypeError) ? err.message : fallback;
+        error.hidden = false;
+      } finally {
+        button.disabled = false;
       }
     });
   });
+
   document.querySelectorAll<HTMLButtonElement>('[data-form-again]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const form = document.getElementById(btn.dataset.formAgain ?? '') as HTMLFormElement | null;

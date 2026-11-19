@@ -43,7 +43,9 @@
   "checkout": "12:00",
   "yandexMaps": {
     "url": "https://yandex.ru/maps/org/gostevoy_dom_khvoya/200587327520/",
-    "orgId": "200587327520"
+    "orgId": "200587327520",
+    "mapWidget": "https://yandex.ru/map-widget/v1/org/gostevoy_dom_khvoya/200587327520/",
+    "reviewsWidget": "https://yandex.ru/maps-reviews-widget/200587327520?comments"
   },
   "docs": {
     "policy": "/politika-konfidencialnosti/",

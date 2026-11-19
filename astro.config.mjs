@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import node from '@astrojs/node';
 
 // Боевой домен взят из прототипа (комментарий [canonical] в _materials/index.html).
 // Главное зеркало (с www или без) — подтвердить у заказчика, см. PLAN.md, этап 0.
@@ -11,10 +12,13 @@ import sitemap from '@astrojs/sitemap';
 const site = process.env.SITE || 'https://www.hvoia-event.ru';
 const base = process.env.BASE || '/';
 
+// Все страницы — статика. Сервер (@astrojs/node) нужен только для POST /api/lead/ (src/pages/api/lead.ts).
+// Сборка: dist/client — статические файлы для веб-сервера, dist/server/entry.mjs — Node-процесс для /api/.
 export default defineConfig({
   site,
   base,
   trailingSlash: 'always',
   build: { format: 'directory' },
-  integrations: [sitemap()],
+  adapter: node({ mode: 'standalone' }),
+  integrations: [sitemap({ filter: (page) => !page.includes('/api/') })],
 });

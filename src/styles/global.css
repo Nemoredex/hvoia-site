@@ -368,6 +368,19 @@ summary:focus-visible, [role="tab"]:focus-visible { outline: 3px solid currentCo
 
 .mbar { display: none; }
 
+/* Astro: ленивые iframe Яндекса. Пин и подпись карты прячутся, когда карта загрузилась. */
+.lazy-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
+.map-card__frame { position: absolute; inset: 0; }
+.map-card:has(.map-card__frame.is-loaded) .map-card__pin { display: none; }
+.reviews-frame { position: relative; margin-top: 20px; height: 560px; border-radius: 24px; overflow: hidden; background: #fff; border: 1px solid var(--c-line); }
+.lazy-frame__fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+.lazy-frame.is-loaded .lazy-frame__fallback { display: none; }
+
+/* Astro: ошибка отправки заявки и место под капчу */
+.lead-form__error { padding: 12px 16px; border-radius: 14px; background: rgba(227,163,59,.16); border: 1px solid var(--c-amber); color: #fff; font-size: 15px; }
+.lead-form__captcha { min-height: 102px; }
+.lead-form .btn[disabled] { opacity: .6; cursor: wait; }
+
 /* Astro: текстовые страницы (политика) */
 .prose { max-width: 760px; display: flex; flex-direction: column; gap: 16px; }
 .prose h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(26px, 2.4vw, 34px); line-height: 1.15; margin-top: 24px; }

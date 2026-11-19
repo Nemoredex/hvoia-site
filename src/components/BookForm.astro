@@ -1,7 +1,10 @@
 ---
 /**
- * Проверка свободных дат. Пока демо, как в прототипе: на этапе 7 (PLAN.md) передаёт даты
- * в модуль онлайн-бронирования (TravelLine / Bnovo), который грузится только после клика.
+ * Проверка свободных дат.
+ * - Если задан PUBLIC_BOOKING_URL (модуль TravelLine / Bnovo) — открываем его. Скрипт модуля на сайт
+ *   не встраиваем: он тяжёлый и ломал бы LCP; параметры дат добавить, когда модуль будет выбран.
+ * - Иначе — переносим даты и число гостей в форму заявки (#contacts) и ставим курсор в телефон:
+ *   человек не теряет введённое, менеджер перезванивает.
  * Даты по умолчанию ставит скрипт (ближайшие пт–вс), чтобы в HTML не застревали прошедшие числа.
  */
 import Icon from './Icon.astro';
@@ -10,9 +13,10 @@ interface Props {
   id: string;
 }
 const { id } = Astro.props;
+const bookingUrl = import.meta.env.PUBLIC_BOOKING_URL;
 ---
 
-<form class="book-form" id={id} aria-label="Проверить свободные даты" data-book-form data-demo-note="Демо-версия: на готовом сайте здесь откроется онлайн-бронирование с этими датами.">
+<form class="book-form" id={id} aria-label="Проверить свободные даты" data-book-form data-booking-url={bookingUrl || undefined}>
   <label class="book-form__field">Заезд<input class="input" type="date" name="checkin" required /></label>
   <label class="book-form__field">Выезд<input class="input" type="date" name="checkout" required /></label>
   <label class="book-form__field book-form__field--sm">Гостей<select class="input" name="guests"><option>до 10</option><option>11–20</option><option>больше 20</option></select></label>
@@ -20,11 +24,13 @@ const { id } = Astro.props;
 </form>
 
 <script>
-  // main.js прототипа, блок 4: выезд не раньше заезда + демо-сообщение.
   const iso = (d: Date) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  const ru = (v: string) => v.split('-').reverse().slice(0, 2).join('.');
+
   document.querySelectorAll<HTMLFormElement>('[data-book-form]').forEach((form) => {
     const checkin = form.querySelector<HTMLInputElement>('[name="checkin"]')!;
     const checkout = form.querySelector<HTMLInputElement>('[name="checkout"]')!;
+    const guests = form.querySelector<HTMLSelectElement>('[name="guests"]')!;
     const today = new Date();
     const friday = new Date(today);
     friday.setDate(today.getDate() + ((5 - today.getDay() + 7) % 7 || 7));
@@ -44,10 +50,26 @@ const { id } = Astro.props;
     note.className = 'demo-note';
     note.setAttribute('role', 'status');
     form.insertAdjacentElement('afterend', note);
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       if (!form.reportValidity()) return;
-      note.textContent = form.dataset.demoNote ?? '';
+      const url = form.dataset.bookingUrl;
+      if (url) {
+        window.location.href = url;
+        return;
+      }
+      const lead = document.getElementById('contacts-form') as HTMLFormElement | null;
+      if (!lead) return;
+      lead.hidden = false;
+      document.getElementById(lead.dataset.success ?? '')?.setAttribute('hidden', '');
+      const dates = lead.querySelector<HTMLInputElement>('[name="dates"]');
+      const reason = lead.querySelector<HTMLSelectElement>('[name="reason"]');
+      if (dates) dates.value = `${ru(checkin.value)}–${ru(checkout.value)}, гостей: ${guests.value}`;
+      if (reason) reason.value = 'Отдых в коттедже';
+      note.textContent = 'Даты перенесли в заявку ниже — оставьте телефон, менеджер проверит, свободен ли дом.';
+      document.getElementById('contacts')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      lead.querySelector<HTMLInputElement>('[name="phone"]')?.focus({ preventScroll: true });
     });
   });
 </script>

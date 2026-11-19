@@ -1,0 +1,39 @@
+---
+/**
+ * Сторонний iframe (Яндекс Карта, отзывы), который грузится только когда блок подходит к экрану.
+ * Размер задаёт родитель — место зарезервировано, сдвига макета нет. Без JS остаётся ссылка-запасной вариант.
+ */
+interface Props {
+  src: string;
+  title: string;
+  class?: string;
+}
+const { src, title, class: cls } = Astro.props;
+---
+
+<div class:list={['lazy-frame', cls]} data-lazy-frame={src} data-title={title}>
+  <slot />
+</div>
+
+<script>
+  const mount = (box: HTMLElement) => {
+    if (box.dataset.loaded) return;
+    box.dataset.loaded = '1';
+    const f = document.createElement('iframe');
+    f.src = box.dataset.lazyFrame!;
+    f.title = box.dataset.title ?? '';
+    f.loading = 'lazy';
+    f.referrerPolicy = 'no-referrer-when-downgrade';
+    f.setAttribute('allowfullscreen', '');
+    f.addEventListener('load', () => box.classList.add('is-loaded'), { once: true });
+    box.append(f);
+  };
+  const boxes = document.querySelectorAll<HTMLElement>('[data-lazy-frame]');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && (io.unobserve(e.target), mount(e.target as HTMLElement))),
+      { rootMargin: '300px 0px' },
+    );
+    boxes.forEach((b) => io.observe(b));
+  } else boxes.forEach(mount);
+</script>

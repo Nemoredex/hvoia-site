@@ -17,6 +17,7 @@ import '../styles/global.css';
 import type { ImageMetadata } from 'astro';
 import Footer from '../components/Footer.astro';
 import MobileBar from '../components/MobileBar.astro';
+import Metrika from '../components/Metrika.astro';
 import SeoHead, { type JsonLd } from '../components/SeoHead.astro';
 import type { PageSeo } from '../data/seo';
 
@@ -39,6 +40,7 @@ const { seo, jsonLd, ogImage, ogType, mbar = { href: '#contacts', label: 'Зая
     <SeoHead seo={seo} jsonLd={jsonLd} ogImage={ogImage} ogType={ogType} />
     {/* Для preload LCP-картинки и шрифта первого экрана (этапы 4 и 8). */}
     <slot name="head" />
+    <Metrika />
   </head>
   <body>
     <a class="skip-link" href="#main">Перейти к содержанию</a>
