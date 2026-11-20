@@ -23,8 +23,9 @@
 /* Astro: в прототипе здесь background: none, но его перебивал .hero (то же правило ниже по файлу) —
    на экране фон тёмно-зелёный. Оставляем как видно на экране: файл подключается после global.css. */
 .hero--frame { --frame: clamp(8px, 1.4vw, 20px); --frame-r: clamp(28px, 4vw, 64px); }
-.hero--frame > .hero__img, .hero--frame > .hero__shade, .hero--frame > .hero__glow { left: var(--frame); right: var(--frame); width: auto; border-radius: 0 0 var(--frame-r) var(--frame-r); }
-.hero--frame > .hero__img { width: calc(100% - 2 * var(--frame)); }
+.hero--frame .hero__img, .hero--frame > .hero__shade, .hero--frame > .hero__glow { left: var(--frame); right: var(--frame); width: auto; border-radius: 0 0 var(--frame-r) var(--frame-r); }
+/* .hero__img лежит внутри <picture> (кадр для телефона), поэтому селектор без «>». */
+.hero--frame .hero__img { width: calc(100% - 2 * var(--frame)); }
 .hero--frame > .hero__glow { background: linear-gradient(180deg, rgba(33,42,31,0) 55%, rgba(33,42,31,.45) 100%); }
 /* Как добраться — «Дорога»: без деревьев, пунктир маршрута и метка */
 .hero__edge--road { height: clamp(72px, 9.7vw, 140px); }
