@@ -30,15 +30,14 @@ const { path, title, lead, image, edge, facts = [], cta, headerCta, headerCtaLab
 const cls = [
   'hero',
   'hero--inner',
-  edge === 'mist' && 'hero--mist',
   edge === 'frame' && 'hero--frame',
   (edge === 'frame' || edge === 'road' || edge === 'plain') && 'hero--flat',
   edge === 'plain' && 'hero--plain',
 ]
   .filter(Boolean)
   .join(' ');
-const treesBack = ['hill', 'mist', 'garland', 'drift'].includes(edge);
-const treesFront = ['hill', 'garland', 'drift'].includes(edge);
+const treesBack = ['hill', 'garland'].includes(edge);
+const treesFront = ['hill', 'garland'].includes(edge);
 ---
 
 <section class={cls}>

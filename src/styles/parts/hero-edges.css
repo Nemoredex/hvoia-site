@@ -7,12 +7,11 @@
 /* Главная — «Лес»: два ряда сосен перетекают в тёмную полосу «Выберите формат» без шва */
 /* Коттедж — «Поляна»: мягкий холм */
 .hero__edge--hill { height: clamp(48px, 7vw, 112px); }
-/* Свадьбы — «Туман»: лес растворяется в дымке */
-.hero--mist .trees--back { opacity: .5; }
+/* Свадьбы — «Туман»: фото растворяется в дымке, без деревьев */
 .hero__edge--mist { height: clamp(150px, 20vw, 300px); background: linear-gradient(180deg, rgba(245,241,230,0) 0%, rgba(245,241,230,.35) 40%, rgba(245,241,230,.82) 75%, var(--c-cream) 100%); }
 /* Праздники — «Гирлянда»: огоньки над краем шатра */
 .hero__edge--garland { height: calc(28px + 72px); background: url(../../assets/img/decor/garland.svg) left top / 240px 72px repeat-x, url(../../assets/img/decor/scallop.svg) left bottom / 80px 28px repeat-x; }
-/* Цены — «Сугроб»: снег и неровный край */
+/* Цены — «Сугроб»: снег и неровный край, без деревьев */
 .hero__snow { position: absolute; inset: 0; pointer-events: none; opacity: .55;
   background:
     radial-gradient(circle at 20% 30%, #fff 0 1.6px, transparent 2.2px) 0 0 / 130px 130px,
