@@ -6,6 +6,7 @@ import LazyFrame from './LazyFrame.astro';
 import company from '../data/company.json';
 
 const { address, phones, messengers } = company;
+import { phoneText } from '../lib/format';
 ---
 
 <section class="section section--tight container">
@@ -13,10 +14,10 @@ const { address, phones, messengers } = company;
     <address class="contact-card">
       <div class="contact-row"><small>Адрес</small><span class="contact-row__value">{address.full}</span><span class="muted">{address.near}</span></div>
       <div class="contact-row">
-        <small>{phones.booking.purpose}</small><a class="contact-row__value" href={phones.booking.href}>{phones.booking.label}</a>
+        <small>{phones.booking.purpose}</small><a class="contact-row__value" href={phones.booking.href}>{phoneText(phones.booking.label)}</a>
         <div class="contact-row__actions"><a class="chip chip--light" href={messengers.telegram}>Telegram</a><a class="chip chip--light" href={messengers.whatsapp}>WhatsApp</a></div>
       </div>
-      <div class="contact-row"><small>{phones.events.purpose}</small><a class="contact-row__value" href={phones.events.href}>{phones.events.label}</a></div>
+      <div class="contact-row"><small>{phones.events.purpose}</small><a class="contact-row__value" href={phones.events.href}>{phoneText(phones.events.label)}</a></div>
       <div class="contact-row"><small>Почта</small><a class="contact-row__value" href={`mailto:${company.email}`}>{company.email}</a></div>
       <div class="contact-row"><small>Работаем</small><span class="contact-row__value">{company.hours.label}</span><span class="muted">Заселение с {company.checkin}, выезд до {company.checkout}</span></div>
     </address>

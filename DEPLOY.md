@@ -50,6 +50,14 @@ sudo systemctl daemon-reload && sudo systemctl enable --now hvoia-api
 
 ## 3. Проверка после выкладки (15 минут)
 
+Всё про сервер одной командой (коды ответов, 301 со всех старых адресов, 404, сжатие, кеш, зеркала, robots):
+
+```bash
+node scripts/check-server.mjs https://www.hvoia-event.ru
+```
+
+То же вручную:
+
 ```bash
 curl -sI http://hvoia-event.ru/ | head -3                    # 301 → https://www.
 curl -sI https://www.hvoia-event.ru/kottedzh | head -3       # 301 → /kottedzh/

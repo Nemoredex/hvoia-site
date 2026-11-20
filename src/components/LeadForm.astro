@@ -21,6 +21,7 @@ interface Props {
 const { title, reason = 'Отдых в коттедже' } = Astro.props;
 const { phones, messengers } = company;
 const captchaKey = import.meta.env.PUBLIC_SMARTCAPTCHA_CLIENT_KEY;
+import { phoneText } from '../lib/format';
 ---
 
 <section class="section container" id="contacts">
@@ -48,11 +49,11 @@ const captchaKey = import.meta.env.PUBLIC_SMARTCAPTCHA_CLIENT_KEY;
       <button class="btn btn--amber btn--lg" type="submit"><span class="btn__icon"><Icon name="arrow" /></span>Отправить заявку</button>
       <p class="lead-form__error" role="alert" hidden data-lead-error></p>
       <p class="lead-form__consent">Нажимая кнопку, вы соглашаетесь на <a href={href(company.docs.policy)}>обработку персональных данных</a>.</p>
-      <div class="lead__chips"><a class="chip" href={messengers.telegram}>Telegram</a><a class="chip" href={messengers.whatsapp}>WhatsApp</a><a class="chip" href={phones.events.href}>{phones.events.label}</a></div>
+      <div class="lead__chips"><a class="chip" href={messengers.telegram}>Telegram</a><a class="chip" href={messengers.whatsapp}>WhatsApp</a><a class="chip" href={phones.events.href}>{phoneText(phones.events.label)}</a></div>
     </form>
     <div class="lead-form" id="contacts-ok" tabindex="-1" role="status" hidden>
       <p class="title-md">Заявка отправлена</p>
-      <p>Спасибо! Перезвоним в рабочее время: {company.hours.label}. Если срочно — звоните: <a href={phones.booking.href} style="color:#fff">{phones.booking.label}</a>.</p>
+      <p>Спасибо! Перезвоним в рабочее время: {company.hours.label}. Если срочно — звоните: <a href={phones.booking.href} style="color:#fff">{phoneText(phones.booking.label)}</a>.</p>
       <button type="button" class="chip" data-form-again="contacts-form">Отправить ещё одну</button>
     </div>
   </div>

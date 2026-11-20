@@ -30,6 +30,7 @@ const jsonLd = {
     acceptedAnswer: { '@type': 'Answer', text: f.a },
   })),
 };
+import { phoneText } from '../lib/format';
 ---
 
 <section class="section container">
@@ -37,7 +38,7 @@ const jsonLd = {
     <div class="faq__intro">
       <h2 class="title-lg" set:html={title} />
       <p>{intro}</p>
-      <div><Button href={company.phones.booking.href} variant="forest">{company.phones.booking.label}</Button></div>
+      <div><Button href={company.phones.booking.href} variant="forest">{phoneText(company.phones.booking.label)}</Button></div>
     </div>
     <div class="faq__list">
       {items.map((f, i) => (

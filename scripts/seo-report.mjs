@@ -50,8 +50,11 @@ const urlOf = (file) => {
   return rel === 'index.html' ? '/' : rel.endsWith('/index.html') ? `/${rel.slice(0, -10)}` : `/${rel}`;
 };
 
+// Демо на GitHub Pages собирается с BASE=/имя-репозитория/ — ссылки в HTML начинаются с него.
+const BASE_PATH = (process.env.BASE || '/').replace(/\/$/, '');
 const exists = (path) => {
-  const p = join(DIST, decodeURIComponent(path).replace(/^\//, ''));
+  const local = BASE_PATH && path.startsWith(BASE_PATH + '/') ? path.slice(BASE_PATH.length) : path;
+  const p = join(DIST, decodeURIComponent(local).replace(/^\//, ''));
   return existsSync(p) && (statSync(p).isFile() || existsSync(join(p, 'index.html')));
 };
 
@@ -121,6 +124,25 @@ function check(file) {
     if (!im.sized) err(`Картинка без width/height (сдвиг макета): ${im.src}`);
     if (im.src && !/\.(webp|avif|svg)(\?|$)/.test(im.src)) warn(`Не WebP: ${im.src}`);
   });
+
+  // файлы, на которые ссылаются картинки, <source>, preload и url() во встроенном CSS, — должны быть в сборке
+  const asset = (u) => u.replace(/^\/[^/]+(?=\/_astro\/)/, ''); // демо в подпапке: /hvoia-site/_astro/… → /_astro/…
+  const missing = new Set();
+  const need = (u) => {
+    if (!u || /^(data:|https?:|#|%23|mailto:|tel:)/i.test(u)) return; // %23… — ссылка внутри встроенного SVG
+    if (!u.startsWith('/')) return missing.add(`${u} (относительный путь — файл не найдётся)`);
+    if (!exists(asset(u.split(/[?#]/)[0]))) missing.add(u);
+  };
+  for (const t of body.match(/<(?:img|source)\b[^>]*>/g) ?? []) {
+    need(attr(t, 'src'));
+    const srcset = attr(t, 'srcset');
+    srcset?.split(',').forEach((c) => need(c.trim().split(/\s+/)[0]));
+    if (srcset && /\d+w\b/.test(srcset) && !attr(t, 'sizes')) err(`srcset без sizes (браузер возьмёт файл на всю ширину экрана): ${attr(t, 'src') ?? srcset.slice(0, 60)}`);
+  }
+  for (const t of html.match(/<link[^>]*rel="preload"[^>]*>/g) ?? []) need(attr(t, 'href'));
+  for (const css of html.match(/<style[^>]*>[\s\S]*?<\/style>/g) ?? [])
+    for (const m of css.matchAll(/url\((["']?)([^"')]+)\1\)/g)) need(m[2]);
+  missing.forEach((u) => err(`Файла нет в сборке: ${u}`));
 
   // JSON-LD
   const jsonld = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => {
@@ -198,6 +220,8 @@ for (const key of ['title', 'description']) {
 const site = [];
 const robotsTxt = join(DIST, 'robots.txt');
 if (!existsSync(robotsTxt)) site.push({ level: 'error', msg: 'Нет robots.txt (этап 6)' });
+else if (/^Disallow:\s*\/\s*$/m.test(readFileSync(robotsTxt, 'utf8')))
+  site.push({ level: process.env.PUBLIC_NOINDEX === 'true' ? 'warn' : 'error', msg: 'robots.txt закрывает весь сайт (Disallow: /) — так только в демо-сборке' });
 else if (!/Sitemap:/i.test(readFileSync(robotsTxt, 'utf8'))) site.push({ level: 'error', msg: 'В robots.txt нет Sitemap' });
 if (!existsSync(join(DIST, 'sitemap-index.xml'))) site.push({ level: 'error', msg: 'Нет sitemap-index.xml' });
 else site.push({ level: 'ok', msg: `sitemap: ${sitemapUrls?.length ?? 0} URL` });

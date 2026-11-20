@@ -12,8 +12,10 @@
     "seo": "astro build && node scripts/seo-report.mjs",
     "seo:check": "node scripts/seo-report.mjs --strict",
     "redirects": "node scripts/redirects.mjs",
-    "verify": "astro check && astro build && node scripts/redirects.mjs && node scripts/seo-report.mjs --strict",
-    "serve": "node scripts/serve.mjs"
+    "verify": "astro check && astro build && node scripts/redirects.mjs && html-validate \"dist/client/**/*.html\" && node scripts/seo-report.mjs --strict",
+    "serve": "node scripts/serve.mjs",
+    "validate:html": "html-validate \"dist/client/**/*.html\"",
+    "check:server": "node scripts/check-server.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.12",
@@ -27,6 +29,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
     "@types/nodemailer": "8.0.2",
+    "html-validate": "^11.21.1",
     "typescript": "^6.0.3"
   }
 }

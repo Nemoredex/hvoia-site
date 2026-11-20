@@ -14,6 +14,7 @@ interface Props {
 const { ctaHref, ctaLabel = 'Забронировать' } = Astro.props;
 const current = Astro.url.pathname;
 const isCurrent = (path: string) => (href(path) === current ? 'page' : undefined);
+import { phoneText } from '../lib/format';
 ---
 
 <header class="site-header">
@@ -26,7 +27,7 @@ const isCurrent = (path: string) => (href(path) === current ? 'page' : undefined
       {mainNav.map((l) => <a href={href(l.path)} aria-current={isCurrent(l.path)}>{l.label}</a>)}
     </nav>
     <div class="header-actions">
-      <a class="header-phone" href={company.phones.booking.href}>{company.phones.booking.label}</a>
+      <a class="header-phone" href={company.phones.booking.href}>{phoneText(company.phones.booking.label)}</a>
       <Button href={ctaHref}>{ctaLabel}</Button>
       <button class="burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-nav" data-menu-toggle>
         <Icon name="burger" size={22} />

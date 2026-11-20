@@ -17,3 +17,8 @@ export function priceText(item: { price?: number; text?: string }): string {
   if (typeof item.price === 'number') return rub(item.price);
   return item.text ?? '';
 }
+
+/** Телефон для показа: неразрывные пробелы, чтобы номер не переносился (дефисы держит CSS: a[href^="tel:"] nowrap). */
+export function phoneText(label: string): string {
+  return label.replace(/ /g, ' ');
+}

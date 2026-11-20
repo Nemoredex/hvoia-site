@@ -6,6 +6,7 @@ import { href } from '../lib/url';
 
 const { legal, address, phones } = company;
 const year = new Date().getFullYear();
+import { phoneText } from '../lib/format';
 ---
 
 <footer class="site-footer">
@@ -25,8 +26,8 @@ const year = new Date().getFullYear();
     <div>
       <p class="site-footer__title">Связаться</p>
       <ul>
-        <li><a href={phones.booking.href}>{phones.booking.label}</a></li>
-        <li><a href={phones.events.href}>{phones.events.label}</a></li>
+        <li><a href={phones.booking.href}>{phoneText(phones.booking.label)}</a></li>
+        <li><a href={phones.events.href}>{phoneText(phones.events.label)}</a></li>
         <li><a href={`mailto:${company.email}`}>{company.email}</a></li>
         <li>{company.hours.label}</li>
       </ul>

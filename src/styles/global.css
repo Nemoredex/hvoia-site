@@ -37,6 +37,7 @@ img { display: block; max-width: 100%; }
 picture { display: contents; } /* Astro: <picture> с кадрами под брейкпоинты не ломает сетки и flex */
 a { color: var(--c-forest); }
 a:hover { color: var(--c-forest-deep); }
+a[href^="tel:"] { white-space: nowrap; } /* Astro: номер не рвётся на две строки (в Onest нет неразрывного дефиса) */
 h1, h2, h3 { margin: 0; text-wrap: balance; }
 p, ul, ol { margin: 0; }
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid #E2A644; outline-offset: 2px; }
