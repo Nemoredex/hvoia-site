@@ -5,7 +5,7 @@
 ## 0. Перед запуском (блокеры)
 
 `npm run seo:check` должен проходить без ошибок. Сейчас не хватает:
-- [ ] PDF «Правила проживания» → положить в `public/docs/pravila-prozhivaniya.pdf`
+- [x] PDF «Правила проживания» → `public/docs/pravila-prozhivaniya.pdf` (взят со старого сайта; свежую версию от заказчика класть под тем же именем)
 - [ ] ОГРН → `src/data/company.json`, поле `legal.ogrn`
 - [ ] текст политики ПДн → `src/pages/politika-konfidencialnosti.astro`
 - [ ] все `[заглушки]` из SEO-отчёта (`npm run seo` → `seo-report.html`)
