@@ -1,6 +1,8 @@
 ---
 /** Главная: две арки «Отдых / Праздник» на тёмной полосе. */
+import '../styles/parts/paths.css';
 import Img from './Img.astro';
+import * as art from '../lib/art';
 import Button from './Button.astro';
 import stay from '../data/stay.json';
 import events from '../data/events.json';
@@ -8,18 +10,16 @@ import { photo } from '../data/images';
 import { fromRub } from '../lib/format';
 import { href } from '../lib/url';
 import branch from '../assets/img/decor/branch.webp';
-import treesCream from '../assets/img/decor/trees-cream.webp';
 
-const imgSizes = '(max-width: 760px) 100vw, 260px';
 ---
 
 <div class="band">
   <section class="container band__inner" id="paths">
-    <Img class="branch" src={branch} alt="" decorative widths={[300, 561]} sizes="280px" style="right:-30px;top:-20px;transform:rotate(-12deg)" />
+    <Img class="branch" src={branch} alt="" decorative max={420} quality={50} sizes="280px" style="right:-30px;top:-20px;transform:rotate(-12deg)" />
     <h2 class="title-lg">Приезжайте отдохнуть или доверьте нам ваш праздник</h2>
     <div class="paths">
       <a class="path" href={href('/kottedzh/')}>
-        <Img class="path__img" src={photo('kitchen')} alt="Кухня-гостиная со столом на 10 человек" sizes={imgSizes} widths={[520, 800]} />
+        <Img class="path__img" src={photo('kitchen')} alt="Кухня-гостиная со столом на 10 человек" art={art.path} />
         <div class="path__body">
           <h3 class="path__title">Отдых в&nbsp;коттедже</h3>
           <p>Весь дом и территория только для вашей компании: {stay.house.bedrooms} спальни, баня, чан и тёплый бассейн.</p>
@@ -28,7 +28,7 @@ const imgSizes = '(max-width: 760px) 100vw, 260px';
         </div>
       </a>
       <a class="path" href={href('/svadby/')}>
-        <Img class="path__img" src={photo('wedding-arch')} alt="Свадебная арка среди сосен" sizes={imgSizes} widths={[520, 900]} />
+        <Img class="path__img" src={photo('wedding-arch')} alt="Свадебная арка среди сосен" art={art.path} />
         <div class="path__body">
           <h3 class="path__title">Свадьба или праздник</h3>
           <p>Тёплый шатёр на {events.tent.area} м² круглый год. Декор, банкет, ведущий, фото и видео — под ключ.</p>
@@ -38,5 +38,5 @@ const imgSizes = '(max-width: 760px) 100vw, 260px';
       </a>
     </div>
   </section>
-  <Img class="edge edge--bottom" src={treesCream} alt="" decorative sizes="100vw" widths={[1440, 2880]} />
+  <div class="edge edge--bottom edge--trees edge--cream" aria-hidden="true"></div>
 </div>

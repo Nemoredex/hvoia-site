@@ -1,0 +1,15 @@
+/* Стили блока — подключаются только на страницах, где он есть (Astro собирает CSS по странице).
+   Перенесено из global.css 1:1, медиазапросы — из его раздела «Адаптив». */
+/* форма проверки дат */
+.book-form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px; background: #fff; color: var(--c-text); padding: 12px; border-radius: 28px; max-width: 960px; }
+.book-form__field { display: flex; flex-direction: column; gap: 4px; flex: 1 1 150px; min-width: 0; font-size: 13px; color: var(--c-muted); padding-left: 8px; }
+.book-form__field--sm { flex-basis: 130px; }
+.book-form .btn { flex: 1 0 auto; min-height: 52px; font-size: 16px; white-space: nowrap; }
+.book-form .btn__icon { width: 44px; height: 44px; }
+.demo-note { margin: 8px 0 0; font-size: 14px; line-height: 1.45; }
+@media (max-width: 520px) {
+  .book-form__field { flex-basis: calc(50% - 5px); }
+  .book-form__field--sm { flex-basis: 100%; }
+  .book-form .input { padding: 0 12px; }
+  .book-form .btn { flex-basis: 100%; }
+}

@@ -3,18 +3,10 @@
  * Каркас всех страниц. SEO — в SeoHead. Шапка стоит внутри Hero/PageHero (как в прототипе),
  * подвал и мобильная панель — здесь.
  */
-import '@fontsource/prata/cyrillic-400.css';
-import '@fontsource/prata/latin-400.css';
-import '@fontsource/onest/cyrillic-400.css';
-import '@fontsource/onest/cyrillic-500.css';
-import '@fontsource/onest/cyrillic-600.css';
-import '@fontsource/onest/latin-400.css';
-import '@fontsource/onest/latin-500.css';
-import '@fontsource/onest/latin-600.css';
-
 import '../styles/global.css';
 
 import type { ImageMetadata } from 'astro';
+import Fonts from '../components/Fonts.astro';
 import Footer from '../components/Footer.astro';
 import MobileBar from '../components/MobileBar.astro';
 import Metrika from '../components/Metrika.astro';
@@ -38,7 +30,8 @@ const { seo, jsonLd, ogImage, ogType, mbar = { href: '#contacts', label: 'Зая
 <html lang="ru">
   <head>
     <SeoHead seo={seo} jsonLd={jsonLd} ogImage={ogImage} ogType={ogType} />
-    {/* Для preload LCP-картинки и шрифта первого экрана (этапы 4 и 8). */}
+    <Fonts />
+    {/* Для preload LCP-картинки первого экрана, если понадобится. */}
     <slot name="head" />
     <Metrika />
   </head>

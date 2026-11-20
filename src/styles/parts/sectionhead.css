@@ -1,0 +1,8 @@
+/* Стили блока — подключаются только на страницах, где он есть (Astro собирает CSS по странице).
+   Перенесено из global.css 1:1, медиазапросы — из его раздела «Адаптив». */
+.section__head { position: relative; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 36px; }
+.section__head p { max-width: 440px; color: var(--c-muted); }
+.section__head--faded { margin-top: 80px; }
+@media (max-width: 760px) {
+  .section__head--faded { margin-top: 56px; }
+}

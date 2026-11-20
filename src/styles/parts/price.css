@@ -1,0 +1,15 @@
+/* Стили блока — подключаются только на страницах, где он есть (Astro собирает CSS по странице).
+   Перенесено из global.css 1:1, медиазапросы — из его раздела «Адаптив». */
+/* таблица цен */
+.price-card { background: #fff; border-radius: 28px; padding: clamp(20px, 3vw, 40px); }
+.price-card + .price-card { margin-top: 16px; }
+.price-card__title { font-family: var(--f-display); font-weight: 400; font-size: 28px; margin-bottom: 8px; }
+.price-list { list-style: none; padding: 0; display: flex; flex-direction: column; }
+.price-list li { display: flex; align-items: baseline; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--c-line); }
+.price-list li:last-child { border-bottom: 0; }
+.price-list__dots { flex: 1 1 16px; border-bottom: 1px dotted #B9B6A6; transform: translateY(-4px); }
+.price-list__value { font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.price-card__note { margin-top: 14px; color: var(--c-muted); font-size: 15px; }
+@media (max-width: 760px) {
+  .price-list__value { white-space: normal; text-align: right; max-width: 55%; }
+}

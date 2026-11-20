@@ -3,7 +3,9 @@
  * /foto/: фильтр «Дом / Территория / Праздники / Зима». Все фото есть в HTML сразу,
  * фильтр только скрывает лишние — поисковик видит всю галерею.
  */
+import '../styles/parts/gallery.css';
 import Img from './Img.astro';
+import * as art from '../lib/art';
 import { categories, gallery } from '../data/gallery';
 import { photo } from '../data/images';
 ---
@@ -21,7 +23,7 @@ import { photo } from '../data/images';
           class={g.layout === 'arch' ? 'is-arch' : undefined}
           src={photo(g.image)}
           alt={g.alt}
-          sizes={g.layout === 'wide' ? '(max-width: 520px) 100vw, 50vw' : '(max-width: 520px) 100vw, (max-width: 760px) 50vw, 25vw'}
+          art={g.layout === 'wide' ? art.galleryWide : g.layout === 'arch' ? art.galleryArch : art.gallery}
         />
         <figcaption>{g.caption ?? g.alt}</figcaption>
       </figure>

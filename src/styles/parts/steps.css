@@ -1,0 +1,26 @@
+/* Стили блока — подключаются только на страницах, где он есть (Astro собирает CSS по странице).
+   Перенесено из global.css 1:1, медиазапросы — из его раздела «Адаптив». */
+/* шаги */
+.steps { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.steps--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.step { position: relative; padding-top: 28px; border-top: 3px dotted var(--c-forest); }
+.step__num { position: absolute; right: 0; top: -10px; font-family: var(--f-display); font-size: 150px; line-height: 1; color: rgba(46,58,43,.08); }
+.step__dot { position: absolute; left: 0; top: -12px; width: 20px; height: 20px; border-radius: 999px; background: var(--c-amber); border: 3px solid var(--c-cream); }
+.step h3 { position: relative; margin: 0 0 8px; font-size: 22px; font-weight: 600; }
+.step p { position: relative; color: var(--c-muted); max-width: min(320px, calc(100% - 64px)); }
+.steps--4 .step__num { font-size: 120px; }
+.steps--dark .step { border-top-color: var(--c-sage-2); }
+.steps--dark .step__dot { border-color: var(--c-forest); }
+.steps--dark .step__num { color: rgba(255,255,255,.07); }
+.steps--dark .step p { color: var(--c-sage); }
+@media (max-width: 960px) {
+  .steps { grid-template-columns: minmax(0, 1fr); row-gap: 40px; }
+  .steps .step p { max-width: min(520px, calc(100% - 80px)); }
+  .steps--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .steps--4 .step p { max-width: calc(100% - 64px); }
+}
+@media (max-width: 760px) {
+  .steps--4 { grid-template-columns: minmax(0, 1fr); }
+  .step__num, .steps--4 .step__num { font-size: 96px; top: -2px; }
+  .steps .step p, .steps--4 .step p { max-width: calc(100% - 56px); }
+}

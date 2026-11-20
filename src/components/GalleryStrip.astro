@@ -1,6 +1,8 @@
 ---
 /** Короткая галерея из трёх фото: «Как здесь бывает» (главная), «Как это выглядит» (свадьбы). */
+import '../styles/parts/gallery.css';
 import Img from './Img.astro';
+import * as art from '../lib/art';
 import SectionHead from './SectionHead.astro';
 import { photo } from '../data/images';
 
@@ -21,7 +23,7 @@ const { title, items, id, style } = Astro.props;
         class={it.layout === 'wide' ? 'is-wide' : it.layout === 'arch' ? 'is-arch' : undefined}
         src={photo(it.image)}
         alt={it.alt}
-        sizes={it.layout === 'wide' ? '(max-width: 520px) 100vw, 50vw' : '(max-width: 520px) 100vw, (max-width: 760px) 50vw, 25vw'}
+        art={it.layout === 'wide' ? art.galleryWide : it.layout === 'arch' ? art.galleryArch : art.gallery}
       />
     ))}
   </div>

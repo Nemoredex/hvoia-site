@@ -1,47 +1,125 @@
 ---
 /**
- * Обычная картинка контента: WebP через astro:assets, srcset, lazy, размеры из исходника.
- * Ширины и sizes по умолчанию подобраны под сетки прототипа; тонкая настройка — этап 4 (PLAN.md).
+ * Картинка контента: WebP через astro:assets, частая сетка ширин, lazy.
+ *
+ * Почему так (Lighthouse «Improve image delivery»):
+ * - Ширины идут с шагом ~15–25%: браузер берёт ближайший файл ≥ нужного, а не 800 вместо 520.
+ * - aspect — обрезка под форму блока. Блоки с фиксированной высотой и object-fit: cover
+ *   (карточки 160 px, арки, галерея) иначе скачивают фото 4:3, из которого видно меньше половины.
+ * - art — свой кадр и sizes для каждого брейкпоинта (<picture><source media>): на телефоне
+ *   блок горизонтальный, на десктопе вертикальная арка.
+ * - sizes должен совпадать с реальной шириной блока (проверка: scratchpad imgaudit / Lighthouse).
  */
-import { Image } from 'astro:assets';
+import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+
+interface Art {
+  /** media-условие для <source>; у последнего элемента не указывается. */
+  media?: string;
+  /** Ширина / высота кадра. Без него — пропорции исходника. */
+  aspect?: number;
+  sizes: string;
+}
 
 interface Props {
   src: ImageMetadata;
   alt: string;
   class?: string;
   sizes?: string;
-  widths?: number[];
+  aspect?: number;
+  art?: Art[];
+  /** Предел ширины файла (по умолчанию — ширина исходника). */
+  max?: number;
   /** Декор: пустой alt + aria-hidden. */
   decorative?: boolean;
   style?: string;
   quality?: number;
 }
 
+const LADDER = [320, 400, 480, 560, 640, 720, 800, 960, 1120, 1280, 1440, 1600, 1920];
+
 const {
   src,
   alt,
   class: cls,
-  sizes = '(max-width: 520px) 100vw, (max-width: 960px) 50vw, 33vw',
-  widths,
+  sizes = '(max-width: 520px) calc(100vw - 32px), (max-width: 960px) 50vw, 33vw',
+  aspect,
+  art,
+  max,
   decorative = false,
   style,
-  quality = 75,
+  quality = 65,
 } = Astro.props;
 
-const list = (widths ?? [480, 800, 1200, 1600]).filter((w) => w <= src.width);
-if (list.length === 0) list.push(src.width);
+const variants: Art[] = art ?? [{ aspect, sizes }];
+
+async function build(v: Art) {
+  // Наибольшая ширина, при которой кадр нужной пропорции помещается в исходник без растяжения.
+  const cap = Math.floor(Math.min(src.width, max ?? Infinity, v.aspect ? src.height * v.aspect : Infinity));
+  const widths = LADDER.filter((w) => w < cap).concat(cap);
+  const imgs = await Promise.all(
+    widths.map((width) =>
+      getImage({
+        src,
+        width,
+        height: v.aspect ? Math.round(width / v.aspect) : undefined,
+        fit: v.aspect ? 'cover' : undefined,
+        format: 'webp',
+        quality,
+      }),
+    ),
+  );
+  const last = imgs[imgs.length - 1];
+  return {
+    media: v.media,
+    sizes: v.sizes,
+    srcset: imgs.map((img, i) => `${img.src} ${widths[i]}w`).join(', '),
+    // Запасной src — около 800 px: его берут только браузеры без srcset.
+    src: (imgs.find((_, i) => widths[i] >= 800) ?? last).src,
+    width: cap,
+    height: Math.round(v.aspect ? cap / v.aspect : (cap * src.height) / src.width),
+  };
+}
+
+const built = await Promise.all(variants.map(build));
+const sources = built.slice(0, -1);
+const main = built[built.length - 1];
+const imgAlt = decorative ? '' : alt;
 ---
 
-<Image
-  src={src}
-  alt={decorative ? '' : alt}
-  aria-hidden={decorative ? 'true' : undefined}
-  class={cls}
-  widths={list}
-  sizes={sizes}
-  loading="lazy"
-  decoding="async"
-  quality={quality}
-  style={style}
-/>
+{
+  sources.length ? (
+    <picture>
+      {sources.map((s) => (
+        <source media={s.media} srcset={s.srcset} sizes={s.sizes} width={s.width} height={s.height} type="image/webp" />
+      ))}
+      <img
+        src={main.src}
+        srcset={main.srcset}
+        sizes={main.sizes}
+        width={main.width}
+        height={main.height}
+        alt={imgAlt}
+        aria-hidden={decorative ? 'true' : undefined}
+        class={cls}
+        style={style}
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+  ) : (
+    <img
+      src={main.src}
+      srcset={main.srcset}
+      sizes={main.sizes}
+      width={main.width}
+      height={main.height}
+      alt={imgAlt}
+      aria-hidden={decorative ? 'true' : undefined}
+      class={cls}
+      style={style}
+      loading="lazy"
+      decoding="async"
+    />
+  )
+}

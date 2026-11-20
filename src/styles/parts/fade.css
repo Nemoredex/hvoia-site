@@ -1,0 +1,12 @@
+/* Стили блока — подключаются только на страницах, где он есть (Astro собирает CSS по странице).
+   Перенесено из global.css 1:1, медиазапросы — из его раздела «Адаптив». */
+.fade-number {
+  position: absolute; left: clamp(8px, 3vw, 40px); top: 0;
+  font-family: var(--f-display); font-size: clamp(56px, 17vw, 250px); line-height: 1;
+  color: rgba(46,58,43,.07); white-space: nowrap; pointer-events: none;
+  max-width: calc(100% - 2 * clamp(8px, 3vw, 40px)); overflow: hidden;
+}
+.fade-number--long { font-size: clamp(44px, 14vw, 220px); } /* длинные надписи вроде «круглый год» */
+/* Astro: надпись-водяной знак — в ::before из data-text, а не текстом в HTML. Она декоративная (контраст 1,1),
+   и как текст её засчитывают проверки контраста (Lighthouse/axe) и поисковики (слова вне смысла страницы). */
+.fade-number::before { content: attr(data-text); }

@@ -1,7 +1,10 @@
 ---
 /** Свадьбы: тёплый шатёр на тёмной полосе. */
+import '../styles/parts/split.css';
+import '../styles/parts/amenities.css';
 import DarkBand from './DarkBand.astro';
 import Img from './Img.astro';
+import * as art from '../lib/art';
 import Icon from './Icon.astro';
 import events from '../data/events.json';
 import { photo } from '../data/images';
@@ -21,6 +24,6 @@ const nb = (s: string) => s.replace(/^(До|в) /, '$1 ').replace(/ в доме
         ))}
       </div>
     </div>
-    <Img class="split__img" src={photo('tent-night')} alt="Шатёр вечером, огни среди сосен" sizes="(max-width: 960px) 100vw, 50vw" />
+    <Img class="split__img" src={photo('tent-night')} alt="Шатёр вечером, огни среди сосен" art={art.split} />
   </div>
 </DarkBand>

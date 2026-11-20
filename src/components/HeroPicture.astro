@@ -1,8 +1,9 @@
 ---
 /**
  * Фото первого экрана — LCP-картинка: eager + fetchpriority="high", sizes=100vw (как в прототипе).
- * Ширины 640…2560 с шагом, чтобы на 1440 px браузер брал 1600, а не 1920 (минус ~30% веса).
- * Качество 72: фото лежит под затемнением .hero__shade, разницы не видно.
+ * Ширины с шагом ~15%: на 1366 px браузер берёт 1440, а не 1600.
+ * Качество 66 (на телефоне 62): фото лежит под затемнением .hero__shade, разницы не видно.
+ * Телефонный кадр — не больше 1200 px: оригинал 1696 px весит 850 КБ, а на экране под текстом разницы нет.
  * Для главной — арт-дирекция: вертикальный кадр на телефоне (<source media>).
  * Preload не нужен: <img> стоит в начале HTML, его сразу находит preload-сканер браузера,
  * а preload при арт-дирекции рискует скачать оба кадра.
@@ -13,32 +14,37 @@ import type { HeroImage } from '../data/images';
 
 interface Props {
   image: HeroImage;
+  /** min-height блока на десктопе (global.css: .hero 860, .hero--inner 620): на планшете блок
+   *  выше, чем 100vw / пропорция фото, и cover растягивает кадр — sizes учитывает это. */
+  minHeight?: number;
 }
-const { image } = Astro.props;
+const { image, minHeight = 620 } = Astro.props;
 
-async function srcset(src: ImageMetadata, widths: number[]) {
-  const list = widths.filter((w) => w < src.width).concat(src.width);
-  const imgs = await Promise.all(list.map((width) => getImage({ src, width, format: 'webp', quality: 72 })));
+async function srcset(src: ImageMetadata, widths: number[], quality: number, max = src.width) {
+  const cap = Math.min(src.width, max);
+  const list = widths.filter((w) => w < cap).concat(cap);
+  const imgs = await Promise.all(list.map((width) => getImage({ src, width, format: 'webp', quality })));
   return {
     srcset: imgs.map((img, i) => `${img.src} ${list[i]}w`).join(', '),
-    fallback: imgs.find((_, i) => list[i] === 1600) ?? imgs[imgs.length - 1],
+    fallback: imgs.find((_, i) => list[i] >= 1440) ?? imgs[imgs.length - 1],
   };
 }
 
-const desktop = await srcset(image.src, [640, 960, 1280, 1600, 1920]);
-const mobile = image.mobile ? await srcset(image.mobile, [640, 900, 1200]) : null;
+const desktop = await srcset(image.src, [768, 960, 1120, 1280, 1440, 1600, 1920, 2240], 66);
+const mobile = image.mobile ? await srcset(image.mobile, [480, 640, 768, 900, 1080], 62, 1200) : null;
+const desktopSizes = `max(100vw, ${Math.round((minHeight * image.src.width) / image.src.height)}px)`;
 const style = image.position ? `object-position:${image.position}` : undefined;
 ---
 
 <picture>
   {mobile && image.mobile && (
-    <source media="(max-width: 760px)" srcset={mobile.srcset} sizes="100vw" width={image.mobile.width} height={image.mobile.height} />
+    <source media="(max-width: 760px)" srcset={mobile.srcset} sizes="max(100vw, 400px)" width={image.mobile.width} height={image.mobile.height} type="image/webp" />
   )}
   <img
     class="hero__img"
     src={desktop.fallback.src}
     srcset={desktop.srcset}
-    sizes="100vw"
+    sizes={desktopSizes}
     alt={image.alt}
     width={image.src.width}
     height={image.src.height}

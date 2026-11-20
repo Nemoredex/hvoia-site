@@ -6,6 +6,7 @@
  * Если сервер недоступен или не настроен — показываем телефоны и мессенджеры, заявка не теряется молча.
  * Без JS форма уходит обычным POST (сервер ответит JSON — запасной путь, не основной).
  */
+import '../styles/parts/lead.css';
 import Img from './Img.astro';
 import Icon from './Icon.astro';
 import company from '../data/company.json';
@@ -24,7 +25,7 @@ const captchaKey = import.meta.env.PUBLIC_SMARTCAPTCHA_CLIENT_KEY;
 
 <section class="section container" id="contacts">
   <div class="lead">
-    <Img class="branch" src={branch} alt="" decorative widths={[300, 561]} sizes="300px" style="right:-50px;bottom:-60px;width:300px;transform:scaleX(-1) rotate(10deg)" />
+    <Img class="branch" src={branch} alt="" decorative max={420} quality={50} sizes="300px" style="right:-50px;bottom:-60px;width:300px;transform:scaleX(-1) rotate(10deg)" />
     <div class="lead__person">
       <div class="lead__photo-placeholder">Фото организатора или управляющего — нужно настоящее фото от заказчика</div>
       <div class="lead__badge"><small>Ваш организатор</small><strong>[Имя Фамилия]</strong></div>
@@ -38,7 +39,7 @@ const captchaKey = import.meta.env.PUBLIC_SMARTCAPTCHA_CLIENT_KEY;
       </div>
       <div class="field-row">
         <label class="field">Что планируете<select class="input" name="reason">{REASONS.map((r) => <option selected={r === reason}>{r}</option>)}</select></label>
-        <label class="field">Дата или период<input class="input" type="text" name="dates" placeholder="Например, 12–14 декабря…" maxlength="120" /></label>
+        <label class="field">Дата или период<input class="input" type="text" name="dates" autocomplete="off" placeholder="Например, 12–14 декабря…" maxlength="120" /></label>
       </div>
       {/* Honeypot: скрыто от людей и скринридеров, боты заполняют. */}
       <div class="visually-hidden" aria-hidden="true"><label>Сайт<input type="text" name="website" tabindex="-1" autocomplete="off" /></label></div>

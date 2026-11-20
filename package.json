@@ -12,12 +12,13 @@
     "seo": "astro build && node scripts/seo-report.mjs",
     "seo:check": "node scripts/seo-report.mjs --strict",
     "redirects": "node scripts/redirects.mjs",
-    "verify": "astro check && astro build && node scripts/redirects.mjs && node scripts/seo-report.mjs --strict"
+    "verify": "astro check && astro build && node scripts/redirects.mjs && node scripts/seo-report.mjs --strict",
+    "serve": "node scripts/serve.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.12",
     "@astrojs/sitemap": "^3.7.4",
-    "@fontsource/onest": "^5.3.1",
+    "@fontsource-variable/onest": "^5.3.1",
     "@fontsource/prata": "^5.3.0",
     "astro": "^7.4.10",
     "nodemailer": "10.3.1",

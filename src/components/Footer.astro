@@ -1,17 +1,15 @@
 ---
 /** Подвал с полосой тёмного леса. Коммерческие факторы: юрлицо, ИНН, ОГРН, адрес, телефоны, почта. */
-import Img from './Img.astro';
 import company from '../data/company.json';
 import { footerNav } from '../data/navigation';
 import { href } from '../lib/url';
-import treesDark from '../assets/img/decor/trees-dark.webp';
 
 const { legal, address, phones } = company;
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <Img class="edge edge--top" src={treesDark} alt="" decorative sizes="100vw" widths={[1440, 2880]} />
+  <div class="edge edge--top edge--trees edge--dark" aria-hidden="true"></div>
   <div class="container site-footer__inner">
     <div>
       <span class="site-footer__brand">{company.shortName}</span>{legal.name}, ИНН {legal.inn}{legal.ogrn && <>, ОГРН {legal.ogrn}</>}<br />{address.full}

@@ -24,13 +24,21 @@ import weddingCouple from '../assets/img/wedding-couple.webp';
 import weddingDecor from '../assets/img/wedding-decor.webp';
 
 import heroHome from '../assets/img/hero-home.webp';
-import heroHomeMobile from '../assets/img/hero-home-mobile.webp';
+// Вертикальное фото главной, подрезанное под блок 412×886 — scripts/make-hero-crops.mjs.
+import heroHomeMobile from '../assets/img/hero-home-mobile-crop.webp';
 import heroCottage from '../assets/img/hero-cottage.webp';
 import heroWedding from '../assets/img/hero-wedding.webp';
 import heroParty from '../assets/img/hero-party.webp';
 import heroWinter from '../assets/img/hero-winter.webp';
 import heroAerial from '../assets/img/hero-aerial.webp';
 import heroRoad from '../assets/img/hero-road.webp';
+// Вертикальные кадры для телефона — scripts/make-hero-crops.mjs (режет по точке object-position).
+import heroCottageMobile from '../assets/img/hero-cottage-mobile.webp';
+import heroWeddingMobile from '../assets/img/hero-wedding-mobile.webp';
+import heroPartyMobile from '../assets/img/hero-party-mobile.webp';
+import heroWinterMobile from '../assets/img/hero-winter-mobile.webp';
+import heroAerialMobile from '../assets/img/hero-aerial-mobile.webp';
+import heroRoadMobile from '../assets/img/hero-road-mobile.webp';
 
 export const photos = {
   aerial,
@@ -65,7 +73,7 @@ export function photo(key: string): ImageMetadata {
 /** Первые экраны: картинка, alt (из прототипа) и фокус кадра. */
 export interface HeroImage {
   src: ImageMetadata;
-  /** Вертикальный кадр для телефона (только главная). */
+  /** Вертикальный кадр для телефона (≤760 px): на главной — своё фото, на остальных — обрезка. */
   mobile?: ImageMetadata;
   alt: string;
   position?: string;
@@ -78,14 +86,15 @@ export const heroes = {
     alt: 'Коттедж «Хвоя» в соснах на закате, бассейн с подогревом',
     position: '60% 50%',
   },
-  kottedzh: { src: heroCottage, alt: 'Коттедж «Хвоя» вечером: панорамные окна и тёплый бассейн в соснах', position: '62% 50%' },
-  svadby: { src: heroWedding, alt: 'Свадебная арка из белых роз и стулья для церемонии в сосновом лесу', position: '60% 55%' },
-  prazdniki: { src: heroParty, alt: 'Банкет в прозрачном шатре с гирляндами среди сосен', position: '50% 45%' },
-  ceny: { src: heroWinter, alt: 'Коттедж «Хвоя» зимним вечером: тёплый бассейн и банный чан в снегу', position: '65% 50%' },
+  kottedzh: { src: heroCottage, mobile: heroCottageMobile, alt: 'Коттедж «Хвоя» вечером: панорамные окна и тёплый бассейн в соснах', position: '62% 50%' },
+  svadby: { src: heroWedding, mobile: heroWeddingMobile, alt: 'Свадебная арка из белых роз и стулья для церемонии в сосновом лесу', position: '60% 55%' },
+  prazdniki: { src: heroParty, mobile: heroPartyMobile, alt: 'Банкет в прозрачном шатре с гирляндами среди сосен', position: '50% 45%' },
+  ceny: { src: heroWinter, mobile: heroWinterMobile, alt: 'Коттедж «Хвоя» зимним вечером: тёплый бассейн и банный чан в снегу', position: '65% 50%' },
   foto: {
     src: heroAerial,
+    mobile: heroAerialMobile,
     alt: 'Территория гостевого дома «Хвоя» сверху: коттедж, бассейн, шатёр и беседка в сосновом лесу',
     position: '50% 55%',
   },
-  kontakty: { src: heroRoad, alt: 'Песчаная дорога через сосновый лес к гостевому дому «Хвоя»', position: '60% 50%' },
+  kontakty: { src: heroRoad, mobile: heroRoadMobile, alt: 'Песчаная дорога через сосновый лес к гостевому дому «Хвоя»', position: '60% 50%' },
 } satisfies Record<string, HeroImage>;

@@ -1,0 +1,32 @@
+/* Стили блока — подключаются только на страницах, где он есть (Astro собирает CSS по странице).
+   Внутренние страницы (PageHero). Перенесено из global.css 1:1, медиазапросы — из его раздела «Адаптив». */
+/* ---------- Переходы первого экрана: у каждой страницы свой ----------
+   Слой лежит поверх низа героя и заливает его фоном страницы, без резкой линии. */
+.hero__edge { position: absolute; left: 0; right: 0; bottom: -3px; pointer-events: none; }
+.hero__edge > svg:first-child { display: block; width: 100%; height: 100%; }
+/* Главная — «Лес»: два ряда сосен перетекают в тёмную полосу «Выберите формат» без шва */
+/* Коттедж — «Поляна»: мягкий холм */
+.hero__edge--hill { height: clamp(48px, 7vw, 112px); }
+/* Свадьбы — «Туман»: лес растворяется в дымке */
+.hero--mist .trees--back { opacity: .5; }
+.hero__edge--mist { height: clamp(150px, 20vw, 300px); background: linear-gradient(180deg, rgba(245,241,230,0) 0%, rgba(245,241,230,.35) 40%, rgba(245,241,230,.82) 75%, var(--c-cream) 100%); }
+/* Праздники — «Гирлянда»: огоньки над краем шатра */
+.hero__edge--garland { height: calc(28px + 72px); background: url(../../assets/img/decor/garland.svg) left top / 240px 72px repeat-x, url(../../assets/img/decor/scallop.svg) left bottom / 80px 28px repeat-x; }
+/* Цены — «Сугроб»: снег и неровный край */
+.hero__snow { position: absolute; inset: 0; pointer-events: none; opacity: .55;
+  background:
+    radial-gradient(circle at 20% 30%, #fff 0 1.6px, transparent 2.2px) 0 0 / 130px 130px,
+    radial-gradient(circle at 70% 60%, #fff 0 1.2px, transparent 1.8px) 30px 50px / 90px 90px,
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,.8) 0 2.2px, transparent 3px) 60px 20px / 210px 210px;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 45%); mask-image: linear-gradient(180deg, transparent 0%, #000 45%); }
+.hero__edge--drift { height: clamp(56px, 8vw, 128px); }
+/* Фото — «Рамка»: без деревьев, снимок как карточка с закруглённым низом */
+/* Astro: в прототипе здесь background: none, но его перебивал .hero (то же правило ниже по файлу) —
+   на экране фон тёмно-зелёный. Оставляем как видно на экране: файл подключается после global.css. */
+.hero--frame { --frame: clamp(8px, 1.4vw, 20px); --frame-r: clamp(28px, 4vw, 64px); }
+.hero--frame > .hero__img, .hero--frame > .hero__shade, .hero--frame > .hero__glow { left: var(--frame); right: var(--frame); width: auto; border-radius: 0 0 var(--frame-r) var(--frame-r); }
+.hero--frame > .hero__img { width: calc(100% - 2 * var(--frame)); }
+.hero--frame > .hero__glow { background: linear-gradient(180deg, rgba(33,42,31,0) 55%, rgba(33,42,31,.45) 100%); }
+/* Как добраться — «Дорога»: без деревьев, пунктир маршрута и метка */
+.hero__edge--road { height: clamp(72px, 9.7vw, 140px); }
+.hero__road-pin { position: absolute; left: 68.06%; top: 31.4%; width: clamp(22px, 2.2vw, 32px); height: auto; transform: translate(-50%, -100%); filter: drop-shadow(0 4px 8px rgba(0,0,0,.35)); }

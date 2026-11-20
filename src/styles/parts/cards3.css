@@ -1,0 +1,7 @@
+/* Стили блока — подключаются только на страницах, где он есть (Astro собирает CSS по странице).
+   Перенесено из global.css 1:1, медиазапросы — из его раздела «Адаптив». */
+/* три карточки в ряд (комнаты, форматы праздников) */
+.cards-3 { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 760px) {
+  .cards-3 { grid-template-columns: minmax(0, 1fr); }
+}
