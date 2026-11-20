@@ -1,28 +1,134 @@
 ---
-/** Цены: четыре карточки прайса. Все цены открыты в HTML, без вкладок — их видит поисковик. */
-import '../styles/parts/price.css';
-import PriceList from './PriceList.astro';
+/**
+ * Цены на /ceny/: плитки «цена за сутки» + доска с вкладками для остальных строк прайса.
+ *
+ * - Плитки — главное, что ищет гость: будни, выходные, праздники и что входит в цену.
+ * - Доска (по образцу прайса на сайте юристов): слева разделы, справа строки с точками.
+ *   Все панели есть в HTML (поисковик видит все цены). Вкладки включает скрипт; первая
+ *   панель открыта сразу, остальные скрыты атрибутом hidden — без сдвига макета.
+ * - Все числа — из src/data (stay.json, events.json, company.json) через priceRows.
+ */
+import '../styles/parts/price-board.css';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
 import company from '../data/company.json';
+import stay from '../data/stay.json';
 import { priceRows } from '../data/offers';
+import { rub } from '../lib/format';
+
+const { prices, house, included } = stay;
+
+const rates = [
+  { name: 'Будни', days: prices.weekday.short, price: rub(prices.weekday.from), from: true, mod: '' },
+  { name: 'Выходные', days: prices.weekend.short, price: rub(prices.weekend.from), from: true, mod: 'rate--dark' },
+  { name: prices.holidays.label, days: '', price: prices.holidays.text, from: false, mod: 'rate--soft' },
+];
+
+const groups = [
+  { id: 'extra', tab: 'Доп. гости и скидки', title: 'Дополнительные гости и&nbsp;скидки', rows: priceRows.extra, note: '' },
+  {
+    id: 'booking',
+    tab: 'Залог и бронирование',
+    title: 'Залог и&nbsp;бронирование',
+    rows: priceRows.booking,
+    note: `Залог возвратный. Заселение с ${company.checkin}, выезд до ${company.checkout}.`,
+  },
+  { id: 'events', tab: 'Свадьбы и праздники', title: 'Свадьбы и&nbsp;праздники', rows: priceRows.events, note: 'Смету собирает организатор под ваш бюджет и число гостей.' },
+];
 ---
 
-<section class="section container">
-  <div class="price-card">
-    <h2 class="price-card__title">Проживание в&nbsp;коттедже</h2>
-    <PriceList rows={priceRows.stay} />
+<section class="section container prices" aria-labelledby="stay-title">
+  <div class="rates__head">
+    <h2 class="title-lg" id="stay-title">Проживание в&nbsp;коттедже</h2>
+    <p>Цена за&nbsp;сутки — за&nbsp;весь дом и&nbsp;территорию, до&nbsp;{house.guests} гостей. Дом и&nbsp;территория — только для вашей компании.</p>
   </div>
-  <div class="price-card">
-    <h2 class="price-card__title">Дополнительные гости и&nbsp;скидки</h2>
-    <PriceList rows={priceRows.extra} />
+
+  <div class="rates">
+    {rates.map((r) => (
+      <article class:list={['rate', r.mod]}>
+        <div class="rate__top">
+          <h3 class="rate__name">{r.name}</h3>
+          {r.days && <span class="rate__days">{r.days}</span>}
+        </div>
+        <p class="rate__price">{r.from && <span class="rate__from">от</span>}{r.price}</p>
+        <p class="rate__unit">{r.from ? 'за сутки, весь дом' : 'цену назовём на ваши даты'}</p>
+      </article>
+    ))}
   </div>
-  <div class="price-card">
-    <h2 class="price-card__title">Залог и&nbsp;бронирование</h2>
-    <PriceList rows={priceRows.booking} />
-    <p class="price-card__note">Залог возвратный. Заселение с {company.checkin}, выезд до {company.checkout}.</p>
+
+  <div class="rates__included">
+    <span class="rates__label">Входит в&nbsp;цену</span>
+    <ul>
+      {included.map((item) => <li><Icon name="check" size={14} />{item}</li>)}
+    </ul>
   </div>
-  <div class="price-card">
-    <h2 class="price-card__title">Свадьбы и&nbsp;праздники</h2>
-    <PriceList rows={priceRows.events} />
-    <p class="price-card__note">Смету собирает организатор под ваш бюджет и число гостей.</p>
+
+  <div class="price-board" data-price-tabs>
+    <div class="price-tabs" role="tablist" aria-label="Другие цены" aria-orientation="vertical">
+      {groups.map((g, i) => (
+        <button
+          type="button"
+          role="tab"
+          class="price-tab"
+          id={`ptab-${g.id}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          aria-controls={`ppanel-${g.id}`}
+          tabindex={i === 0 ? undefined : -1}
+        >
+          {g.tab}<span class="price-tab__count">{g.rows.length}</span>
+        </button>
+      ))}
+      <span class="price-tabs__sign" aria-hidden="true">₽</span>
+    </div>
+    <div class="price-panels">
+      {groups.map((g, i) => (
+        <div class="price-panel" role="tabpanel" id={`ppanel-${g.id}`} aria-labelledby={`ptab-${g.id}`} hidden={i !== 0}>
+          <h2 class="price-panel__title" set:html={g.title} />
+          <ul class="price-rows">
+            {g.rows.map((r) => (
+              <li><span class="price-rows__name">{r.label}</span><span class="price-rows__dots" aria-hidden="true"></span><span class="price-rows__value">{r.value}</span></li>
+            ))}
+          </ul>
+          {g.note && <p class="price-panel__note">{g.note}</p>}
+        </div>
+      ))}
+      <div class="price-board__foot">
+        <span>Посчитаем точную стоимость на&nbsp;ваши даты и&nbsp;число гостей.</span>
+        <Button href="#book-prices">Узнать цену на&nbsp;ваши даты</Button>
+      </div>
+    </div>
   </div>
 </section>
+
+<script>
+  // Вкладки WAI-ARIA: клик, стрелки, Home/End.
+  document.querySelectorAll<HTMLElement>('[data-price-tabs]').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLElement>('[role="tab"]')];
+    const select = (tab: HTMLElement, focus: boolean) => {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        const panel = document.getElementById(t.getAttribute('aria-controls') ?? '');
+        if (panel) panel.hidden = !on;
+      });
+      if (focus) tab.focus();
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(tab, false));
+      tab.addEventListener('keydown', (e) => {
+        const n = tabs.length;
+        const next =
+          e.key === 'ArrowDown' || e.key === 'ArrowRight' ? tabs[(i + 1) % n]
+          : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? tabs[(i - 1 + n) % n]
+          : e.key === 'Home' ? tabs[0]
+          : e.key === 'End' ? tabs[n - 1]
+          : undefined;
+        if (next) {
+          e.preventDefault();
+          select(next, true);
+        }
+      });
+    });
+  });
+</script>

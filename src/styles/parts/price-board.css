@@ -1,0 +1,68 @@
+/* Цены на /ceny/ (PriceCards): плитки «цена за сутки» и доска с вкладками.
+   Доска — по образцу прайса сайта юристов: слева тёмная колонка разделов, справа строки. */
+.prices { display: flex; flex-direction: column; gap: 28px; }
+.rates__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 40px; margin-bottom: 8px; }
+.rates__head p { max-width: 440px; color: var(--c-muted); }
+
+/* Плитки */
+.rates { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 16px; }
+.rate { background: #fff; border-radius: 28px; padding: clamp(22px, 2.6vw, 32px); display: flex; flex-direction: column; gap: 6px; min-height: 220px; }
+.rate__top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: auto; }
+.rate__name { font-family: var(--f-display); font-weight: 400; font-size: 26px; line-height: 1.15; }
+.rate__days { padding: 6px 12px; border-radius: 999px; background: var(--c-cream); font-size: 14px; font-weight: 500; white-space: nowrap; }
+.rate__price { font-family: var(--f-display); font-size: clamp(36px, 3.6vw, 48px); line-height: 1.05; font-variant-numeric: tabular-nums; margin-top: 28px; }
+.rate__from { font-family: var(--f-body); font-size: 17px; font-weight: 500; margin-right: 8px; vertical-align: .45em; color: var(--c-muted); }
+.rate__unit { color: var(--c-muted); font-size: 15px; }
+.rate--dark { background: var(--c-forest); color: #fff; }
+.rate--dark .rate__days { background: rgba(255,255,255,.12); color: var(--c-sage); }
+.rate--dark .rate__from, .rate--dark .rate__unit { color: var(--c-sage); }
+.rate--dark .rate__price { color: var(--c-amber); }
+.rate--soft { background: transparent; box-shadow: inset 0 0 0 1px var(--c-line); }
+.rate--soft .rate__days { background: #fff; }
+.rate--soft .rate__price { font-size: clamp(28px, 2.6vw, 34px); }
+
+.rates__included { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; padding: 18px 24px; border-radius: 20px; background: #fff; }
+.rates__label { font-weight: 600; font-size: 15px; }
+.rates__included ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.rates__included li { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: var(--c-cream); font-size: 15px; }
+.rates__included li svg { color: var(--c-forest); flex: none; }
+
+/* Доска с вкладками */
+.price-board { display: flex; flex-wrap: wrap; background: #fff; border-radius: 28px; overflow: hidden; margin-top: 20px; }
+.price-tabs { flex: 1 1 300px; max-width: 340px; background: var(--c-forest); padding: 24px 0; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.price-tab {
+  appearance: none; border: 0; background: transparent; text-align: left; cursor: pointer;
+  padding: 16px 24px; min-height: 56px; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  font: 500 16px var(--f-body); color: var(--c-sage); border-left: 3px solid transparent;
+  transition: background-color .2s, color .2s;
+}
+.price-tab:hover { color: #fff; background: rgba(255,255,255,.05); }
+.price-tab[aria-selected="true"] { color: #fff; border-left-color: var(--c-amber); background: rgba(227,163,59,.12); }
+.price-tab:focus-visible { outline: 2px solid var(--c-amber); outline-offset: -2px; }
+.price-tab__count { min-width: 26px; height: 26px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; background: rgba(255,255,255,.1); }
+.price-tabs__sign { margin-top: auto; padding: 48px 24px 0; font-family: var(--f-display); font-size: 140px; line-height: .8; color: rgba(227,163,59,.16); }
+
+.price-panels { flex: 999 1 480px; min-width: 0; padding: clamp(22px, 3vw, 44px); display: flex; flex-direction: column; }
+.price-panel[hidden] { display: none; }
+.price-panel__title { font-family: var(--f-display); font-weight: 400; font-size: clamp(24px, 2.4vw, 30px); margin-bottom: 8px; }
+.price-rows { list-style: none; padding: 0; margin: 0; }
+.price-rows li { display: flex; align-items: baseline; gap: 14px; padding: 18px 0; border-bottom: 1px solid var(--c-line); }
+.price-rows li:last-child { border-bottom: 0; }
+.price-rows__name { font-size: 17px; line-height: 1.45; }
+.price-rows__dots { flex: 1 1 24px; min-width: 24px; border-bottom: 1px dotted #B9B6A6; transform: translateY(-4px); }
+.price-rows__value { font-family: var(--f-display); font-size: 20px; color: var(--c-forest); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.price-panel__note { margin-top: 12px; color: var(--c-muted); font-size: 15px; }
+.price-board__foot { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; margin-top: 28px; padding-top: 28px; border-top: 1px solid var(--c-line); }
+.price-board__foot span { font-size: 15px; color: var(--c-muted); max-width: 360px; }
+
+@media (max-width: 760px) {
+  .price-tabs { max-width: none; flex-basis: 100%; flex-direction: row; overflow-x: auto; padding: 8px; gap: 4px; scrollbar-width: none; }
+  .price-tab { border-left: 0; border-bottom: 3px solid transparent; border-radius: 14px; padding: 12px 14px; min-height: 48px; white-space: nowrap; flex: none; }
+  .price-tab[aria-selected="true"] { border-bottom-color: var(--c-amber); }
+  .price-tabs__sign { display: none; }
+  .price-rows li { flex-wrap: wrap; gap: 4px 14px; }
+  .price-rows__dots { display: none; }
+  .price-rows__name { flex: 1 1 60%; }
+  .price-rows__value { margin-left: auto; white-space: normal; text-align: right; }
+  .rate { min-height: 0; }
+}
