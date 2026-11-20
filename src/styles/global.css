@@ -35,6 +35,10 @@ html { scroll-behavior: smooth; color-scheme: light; -webkit-text-size-adjust: 1
 body { margin: 0; background: var(--c-cream); color: var(--c-text); font: 17px/1.55 var(--f-body); -webkit-font-smoothing: antialiased; }
 img { display: block; max-width: 100%; }
 picture { display: contents; } /* Astro: <picture> с кадрами под брейкпоинты не ломает сетки и flex */
+/* У <source> в стилях браузера display: inline, а не none: при display: contents у <picture>
+   он становится ячейкой сетки и сдвигает картинку (пустые половины блоков в Chrome 156).
+   На выбор кадра браузером это не влияет. */
+picture > source { display: none; }
 a { color: var(--c-forest); }
 a:hover { color: var(--c-forest-deep); }
 a[href^="tel:"] { white-space: nowrap; } /* Astro: номер не рвётся на две строки (в Onest нет неразрывного дефиса) */
