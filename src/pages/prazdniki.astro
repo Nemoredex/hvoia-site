@@ -7,7 +7,6 @@ import Split from '../components/Split.astro';
 import CheckList from '../components/CheckList.astro';
 import Button from '../components/Button.astro';
 import TerritoryBento from '../components/TerritoryBento.astro';
-import Route from '../components/Route.astro';
 import LeadForm from '../components/LeadForm.astro';
 import { pages } from '../data/seo';
 import { eventVenue, imageUrl } from '../lib/schema';
@@ -54,6 +53,5 @@ const jsonLd = [eventVenue(Astro.site, images)];
       banya,
     ]}
   />
-  <Route />
   <LeadForm title="Расскажите о&nbsp;празднике" reason="День рождения или юбилей" />
 </BaseLayout>
