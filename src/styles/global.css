@@ -93,6 +93,10 @@ summary:focus-visible, [role="tab"]:focus-visible { outline: 3px solid currentCo
 .trees, .edge--trees {
   -webkit-mask-image: url(../assets/img/decor/trees-mask-1440.webp); mask-image: url(../assets/img/decor/trees-mask-1440.webp);
 }
+@media (max-width: 520px) {
+  /* Телефон: 1080 px хватает до DPR 2,6 и вдвое легче (25 КБ против 53) — маска грузится до LCP */
+  .trees, .edge--trees { -webkit-mask-image: url(../assets/img/decor/trees-mask-1080.webp); mask-image: url(../assets/img/decor/trees-mask-1080.webp); }
+}
 @media (min-width: 761px) {
   .trees, .edge--trees { -webkit-mask-image: url(../assets/img/decor/trees-mask-2880.webp); mask-image: url(../assets/img/decor/trees-mask-2880.webp); }
 }

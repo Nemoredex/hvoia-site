@@ -9,8 +9,9 @@ const DIR = join(process.cwd(), 'src', 'assets', 'img', 'decor');
 const alpha = await sharp(join(DIR, 'trees-green.webp')).extractChannel(3).toBuffer();
 
 for (const [width, alphaQuality] of [
-  [1440, 75],
-  [2880, 65],
+  [1080, 60], // телефоны до 520 px: 412 px × DPR 2,6
+  [1440, 60],
+  [2880, 55],
 ]) {
   const { data, info } = await sharp(alpha).resize({ width }).toColourspace('b-w').raw().toBuffer({ resolveWithObject: true });
   const rgba = Buffer.alloc(info.width * info.height * 4); // чёрный цвет, форма — в альфе

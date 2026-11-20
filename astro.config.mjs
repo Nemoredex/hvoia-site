@@ -20,6 +20,9 @@ export default defineConfig({
   trailingSlash: 'always',
   // CSS (≈6 КБ gzip) встраивается в HTML: на первом визите из поиска нет блокирующего запроса перед отрисовкой.
   build: { format: 'directory', inlineStylesheets: 'always' },
+  // Картинки: sharp + подбор качества, чтобы WebP весил не больше 0,15 байта на пиксель
+  // (порог Lighthouse — 1/6). Подробности в src/lib/image-service.ts.
+  image: { service: { entrypoint: './src/lib/image-service.ts', config: { bytesPerPixel: 0.15 } } },
   adapter: node({ mode: 'standalone' }),
   integrations: [sitemap({ filter: (page) => !page.includes('/api/') })],
 });

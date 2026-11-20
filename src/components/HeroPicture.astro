@@ -2,7 +2,8 @@
 /**
  * Фото первого экрана — LCP-картинка: eager + fetchpriority="high", sizes=100vw (как в прототипе).
  * Ширины с шагом ~15%: на 1366 px браузер берёт 1440, а не 1600.
- * Качество 66 (на телефоне 62): фото лежит под затемнением .hero__shade, разницы не видно.
+ * Качество 66 (на телефоне 56): фото лежит под затемнением .hero__shade, разницы не видно.
+ * На телефоне это LCP: каждые 10 КБ — ~50 мс на медленном 4G (Lighthouse Mobile), поэтому шаг ~10%.
  * Телефонный кадр — не больше 1200 px: оригинал 1696 px весит 850 КБ, а на экране под текстом разницы нет.
  * Для главной — арт-дирекция: вертикальный кадр на телефоне (<source media>).
  * Preload не нужен: <img> стоит в начале HTML, его сразу находит preload-сканер браузера,
@@ -31,7 +32,7 @@ async function srcset(src: ImageMetadata, widths: number[], quality: number, max
 }
 
 const desktop = await srcset(image.src, [768, 960, 1120, 1280, 1440, 1600, 1920, 2240], 66);
-const mobile = image.mobile ? await srcset(image.mobile, [480, 640, 768, 900, 1080], 62, 1200) : null;
+const mobile = image.mobile ? await srcset(image.mobile, [480, 560, 640, 720, 800, 880, 960, 1080], 56, 1200) : null;
 const desktopSizes = `max(100vw, ${Math.round((minHeight * image.src.width) / image.src.height)}px)`;
 const style = image.position ? `object-position:${image.position}` : undefined;
 ---

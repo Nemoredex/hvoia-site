@@ -5,17 +5,18 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/precompress.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro",
-    "seo": "astro build && node scripts/seo-report.mjs",
+    "seo": "npm run build && node scripts/seo-report.mjs",
     "seo:check": "node scripts/seo-report.mjs --strict",
     "redirects": "node scripts/redirects.mjs",
-    "verify": "astro check && astro build && node scripts/redirects.mjs && html-validate \"dist/client/**/*.html\" && node scripts/seo-report.mjs --strict",
+    "verify": "astro check && npm run build && node scripts/redirects.mjs && html-validate \"dist/client/**/*.html\" && node scripts/seo-report.mjs --strict",
     "serve": "node scripts/serve.mjs",
     "validate:html": "html-validate \"dist/client/**/*.html\"",
-    "check:server": "node scripts/check-server.mjs"
+    "check:server": "node scripts/check-server.mjs",
+    "fonts": "node scripts/make-fonts.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.12",
@@ -30,6 +31,7 @@
     "@astrojs/check": "^0.9.12",
     "@types/nodemailer": "8.0.2",
     "html-validate": "^11.21.1",
+    "subset-font": "^2.9.0",
     "typescript": "^6.0.3"
   }
 }

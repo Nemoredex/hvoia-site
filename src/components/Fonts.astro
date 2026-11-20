@@ -1,19 +1,22 @@
 ---
 /**
- * Шрифты: Prata (заголовки) и Onest Variable (текст), только кириллица и латиница.
+ * Шрифты: Prata (заголовки) и Onest Variable (текст).
  *
- * - Onest — вариативный: один файл на все начертания 400/500/600 (было 6 файлов, стало 2, −16 КБ).
- * - preload — для кириллицы обоих шрифтов: без него браузер узнаёт о шрифте только после
- *   расчёта стилей, и текст первого экрана перерисовывается позже (Lighthouse: Network dependency tree).
- *   Латиница (цифры, кавычки) — без preload: небольшая и подгружается по unicode-range.
- * - @font-face пишем сами, а не через CSS @fontsource: там ещё 5 наборов (вьетнамский, математика…),
- *   которые сайту не нужны, но раздувают встроенный CSS.
+ * - Файлы — урезанные под тексты сайта копии @fontsource (scripts/make-fonts.mjs):
+ *   русский алфавит, ASCII, типографика и все символы из src/. 57 КБ вместо 80.
+ *   Если в текстах появятся редкие символы — перезапустить скрипт.
+ * - Onest — вариативный: один файл на все начертания 400/500/600.
+ * - preload — для всего, что нужно первому экрану: кириллица обоих шрифтов и латиница Onest
+ *   (цифры и знаки в телефоне, фактах, кнопках). Без preload браузер узнаёт о шрифте только
+ *   после расчёта стилей (Lighthouse: Network dependency tree). Латиница Prata (кавычки и цифры
+ *   в заголовках ниже) — без preload.
+ * - @font-face пишем сами, а не через CSS @fontsource: там ещё 5 наборов, которые сайту не нужны.
  * Диапазоны unicode-range — из @fontsource (cyrillic / latin).
  */
-import prataCyr from '@fontsource/prata/files/prata-cyrillic-400-normal.woff2?url';
-import prataLat from '@fontsource/prata/files/prata-latin-400-normal.woff2?url';
-import onestCyr from '@fontsource-variable/onest/files/onest-cyrillic-wght-normal.woff2?url';
-import onestLat from '@fontsource-variable/onest/files/onest-latin-wght-normal.woff2?url';
+import prataCyr from '../assets/fonts/prata-cyr.woff2?url';
+import prataLat from '../assets/fonts/prata-lat.woff2?url';
+import onestCyr from '../assets/fonts/onest-cyr.woff2?url';
+import onestLat from '../assets/fonts/onest-lat.woff2?url';
 
 const CYR = 'U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116';
 const LAT =
@@ -31,5 +34,6 @@ const css = [
 ---
 
 <link rel="preload" href={onestCyr} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={onestLat} as="font" type="font/woff2" crossorigin />
 <link rel="preload" href={prataCyr} as="font" type="font/woff2" crossorigin />
 <style is:inline set:html={css} />

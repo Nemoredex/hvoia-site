@@ -1,5 +1,5 @@
 // Локальный сервер «как на проде» — для Lighthouse и ручной проверки: npm run serve
-// Повторяет deploy/nginx.conf: gzip/brotli, кеш /_astro/ на год, HTML на 5 минут,
+// Повторяет deploy/nginx.conf: готовые .br/.gz из сборки (gzip_static), ETag и 304, кеш /_astro/ на год, HTML на 5 минут,
 // /kottedzh → /kottedzh/, настоящий 404, заголовки безопасности, 301 со старых адресов.
 // POST /api/lead/ обрабатывает тот же код, что и на сервере (dist/server/entry.mjs).
 // `astro preview` всего этого не делает, поэтому Lighthouse на нём ругается на сжатие и кеш.
@@ -77,13 +77,24 @@ async function send(req, res, file, status = 200) {
     : status === 404 || ext === '.html'
       ? 'no-cache' // на проде HTML кешируется 5 минут; локально — нет, чтобы после сборки сразу видеть правки
       : 'public, max-age=300';
+  // Проверка свежести: при повторном заходе браузер получает 304 без тела.
+  const etag = `W/"${body.length.toString(16)}-${Math.round(mtimeMs).toString(16)}"`;
+  headers['ETag'] = etag;
+  headers['Last-Modified'] = new Date(mtimeMs).toUTCString();
+  if (status === 200 && req.headers['if-none-match'] === etag) {
+    res.writeHead(304, headers);
+    return res.end();
+  }
   if (COMPRESSIBLE.has(ext) && body.length >= 512) {
     const accept = String(req.headers['accept-encoding'] || '');
     const enc = /\bbr\b/.test(accept) ? 'br' : /\bgzip\b/.test(accept) ? 'gzip' : null;
+    headers['Vary'] = 'Accept-Encoding';
     if (enc) {
-      body = compress(file, mtimeMs, body, enc);
+      // Готовый файл из scripts/precompress.mjs (brotli 11 / gzip 9), иначе — сжатие на лету.
+      const pre = file + (enc === 'br' ? '.br' : '.gz');
+      const preStat = await stat(pre).catch(() => null);
+      body = preStat && preStat.mtimeMs >= mtimeMs ? await readFile(pre) : compress(file, mtimeMs, body, enc);
       headers['Content-Encoding'] = enc;
-      headers['Vary'] = 'Accept-Encoding';
     }
   }
   headers['Content-Length'] = body.length;
@@ -107,7 +118,7 @@ createServer(async (req, res) => {
     }
 
     const safe = normalize(join(ROOT, path));
-    if (!safe.startsWith(ROOT) || /[\\/]\.(?!well-known)/.test(path)) return send(req, res, join(ROOT, '404.html'), 404);
+    if (!safe.startsWith(ROOT) || /[\\/]\.(?!well-known)/.test(path) || /\.(br|gz)$/.test(path)) return send(req, res, join(ROOT, '404.html'), 404);
 
     if (!path.endsWith('/') && !extname(path) && (await isDir(safe))) {
       res.writeHead(301, { Location: `${path}/${url.search}` });
