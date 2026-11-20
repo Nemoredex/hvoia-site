@@ -51,7 +51,7 @@ const treesFront = ['hill', 'garland'].includes(edge);
       <p class="hero__lead">{lead}</p>
     </div>
     {facts.length > 0 && <ul class="hero__facts">{facts.map((f) => <li>{f}</li>)}</ul>}
-    {cta && <div><Button href={cta.href} size="lg">{cta.label}</Button></div>}
+    {cta && <div><Button href={cta.href} size="lg" variant="cream">{cta.label}</Button></div>}
   </div>
   <div class="hero__glow" aria-hidden="true"></div>
   {edge === 'drift' && <div class="hero__snow" aria-hidden="true"></div>}

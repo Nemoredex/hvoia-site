@@ -29,7 +29,7 @@ const {
         <h3 class="package__title">{p.title.replace(/ (в|под|и) /, ' $1 ')}</h3>
         <div><div class="package__price">{p.price}</div><div class="package__note">{p.priceNote}</div></div>
         <ul>{p.items.map((it) => <li>{it}</li>)}</ul>
-        <Button href={p.ctaHref === currentPath ? selfAnchor : p.ctaHref} variant={p.featured ? 'amber' : 'forest'}>{p.cta}</Button>
+        <Button href={p.ctaHref === currentPath ? selfAnchor : p.ctaHref}>{p.cta}</Button>
       </article>
     ))}
   </div>

@@ -1,21 +1,24 @@
 ---
-/** Кнопка-ссылка прототипа: круг со стрелкой + текст. Внутренние пути оборачиваются в href(). */
+/**
+ * Кнопка-ссылка: текст и стрелка вправо. Внутренние пути оборачиваются в href().
+ * variant по фону: forest — на светлом (кремовый, белый), cream — на фото и тёмно-зелёных блоках.
+ */
 import Icon from './Icon.astro';
 import { href as toHref } from '../lib/url';
 
 interface Props {
   href: string;
-  variant?: 'amber' | 'forest' | 'white';
+  variant?: 'forest' | 'cream';
   size?: 'md' | 'lg';
   /** <span> вместо <a> — когда вся карточка уже ссылка. */
   as?: 'a' | 'span';
   class?: string;
 }
-const { href, variant = 'amber', size = 'md', as = 'a', class: extra } = Astro.props;
+const { href, variant = 'forest', size = 'md', as = 'a', class: extra } = Astro.props;
 const cls = ['btn', `btn--${variant}`, size === 'lg' && 'btn--lg', extra].filter(Boolean).join(' ');
 const Tag = as;
 ---
 
 <Tag class={cls} href={as === 'a' ? toHref(href) : undefined}>
-  <span class="btn__icon"><Icon name="arrow" /></span><slot />
+  <slot /><span class="btn__icon"><Icon name="arrow" size={18} /></span>
 </Tag>

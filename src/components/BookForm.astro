@@ -21,7 +21,7 @@ const bookingUrl = import.meta.env.PUBLIC_BOOKING_URL;
   <label class="book-form__field">Заезд<input class="input" type="date" name="checkin" required /></label>
   <label class="book-form__field">Выезд<input class="input" type="date" name="checkout" required /></label>
   <label class="book-form__field book-form__field--sm">Гостей<select class="input" name="guests"><option>до 10</option><option>11–20</option><option>больше 20</option></select></label>
-  <button class="btn btn--amber" type="submit"><span class="btn__icon"><Icon name="arrow" /></span>Проверить свободные даты</button>
+  <button class="btn btn--forest" type="submit">Проверить свободные даты<span class="btn__icon"><Icon name="arrow" size={18} /></span></button>
 </form>
 
 <script>

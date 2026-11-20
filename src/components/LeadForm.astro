@@ -46,7 +46,7 @@ import { phoneText } from '../lib/format';
       <div class="visually-hidden" aria-hidden="true"><label>Сайт<input type="text" name="website" tabindex="-1" autocomplete="off" /></label></div>
       <input type="hidden" name="page" value={Astro.url.pathname} />
       {captchaKey && <div class="lead-form__captcha" data-captcha-slot></div>}
-      <button class="btn btn--amber btn--lg" type="submit"><span class="btn__icon"><Icon name="arrow" /></span>Отправить заявку</button>
+      <button class="btn btn--cream btn--lg" type="submit">Отправить заявку<span class="btn__icon"><Icon name="arrow" size={18} /></span></button>
       <p class="lead-form__error" role="alert" hidden data-lead-error></p>
       <p class="lead-form__consent">Нажимая кнопку, вы соглашаетесь на <a href={href(company.docs.policy)}>обработку персональных данных</a>.</p>
       <div class="lead__chips"><a class="chip" href={messengers.telegram}>Telegram</a><a class="chip" href={messengers.whatsapp}>WhatsApp</a><a class="chip" href={phones.events.href}>{phoneText(phones.events.label)}</a></div>

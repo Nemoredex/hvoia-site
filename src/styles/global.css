@@ -58,24 +58,22 @@ summary:focus-visible, [role="tab"]:focus-visible { outline: 3px solid currentCo
 .link { font-weight: 600; }
 
 /* ---------- 3. Кнопки ---------- */
+/* Astro: вместо янтарной капсулы с кругом-стрелкой слева (прототип) — текст и стрелка вправо.
+   Два варианта по фону: forest — на светлом (стрелка янтарная), cream — на фото и тёмных блоках. */
 .btn {
-  display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 4px 18px 4px 4px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 50px; padding: 13px 22px 13px 28px;
   border: 0; border-radius: 999px; font: 600 15px/1.2 var(--f-body); text-decoration: none; cursor: pointer;
   transition: background-color .2s, transform .2s;
 }
 .btn:hover { transform: translateY(-1px); }
-.btn__icon { width: 40px; height: 40px; flex: none; border-radius: 999px; display: flex; align-items: center; justify-content: center; }
-.btn--lg { min-height: 56px; padding-right: 24px; font-size: 17px; }
-.btn--lg .btn__icon { width: 48px; height: 48px; }
-.btn--amber { background: var(--c-amber); color: var(--c-text); }
-.btn--amber .btn__icon { background: var(--c-text); color: var(--c-amber); }
-.btn--amber:hover { background: var(--c-amber-hover); color: var(--c-text); }
-.btn--forest { background: var(--c-forest); color: #fff; font-weight: 500; }
-.btn--forest .btn__icon { background: #fff; color: var(--c-forest); }
+.btn__icon { flex: none; display: flex; transition: transform .2s; }
+.btn:hover .btn__icon, .path:hover .btn__icon { transform: translateX(3px); }
+.btn--lg { min-height: 58px; padding: 16px 26px 16px 32px; font-size: 17px; }
+.btn--forest { background: var(--c-forest); color: #fff; }
+.btn--forest .btn__icon { color: var(--c-amber); }
 .btn--forest:hover { background: var(--c-forest-deep); color: #fff; }
-.btn--white { background: #fff; color: var(--c-forest); }
-.btn--white .btn__icon { background: var(--c-forest); color: #fff; }
-.btn--white:hover { color: var(--c-forest); }
+.btn--cream { background: var(--c-cream); color: var(--c-forest); }
+.btn--cream:hover { background: #fff; color: var(--c-forest); }
 .chip {
   display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px;
   border: 1px solid var(--c-line-dark); border-radius: 999px; color: #fff; text-decoration: none;
@@ -217,4 +215,4 @@ summary:focus-visible, [role="tab"]:focus-visible { outline: 3px solid currentCo
   .mbar a.is-cta { background: #fff; color: var(--c-forest); }
   body { padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
 }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn, .btn__icon { transition: none; } }
